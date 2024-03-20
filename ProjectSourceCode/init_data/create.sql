@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
-  username VARCHAR(100) PRIMARY KEY,
+  user_id SERIAL PRIMARY KEY,
+  username VARCHAR(100) UNIQUE PRIMARY KEY,
   password VARCHAR(100) NOT NULL,
   first_name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50) NOT NULL
@@ -36,13 +37,13 @@ CREATE TABLE outfits (
 
 DROP TABLE IF EXISTS users_to_items;
 CREATE TABLE IF NOT EXISTS users_to_items (
-  item_id INTEGER NOT NULL REFERENCES items (item_id),
-  category_id INTEGER NOT NULL REFERENCES categories (category_id)
+  user_id INTEGER NOT NULL REFERENCES users (user_id),
+  item_id INTEGER NOT NULL REFERENCES items (item_id)
 );
 
 DROP TABLE IF EXISTS users_to_outfits;
 CREATE TABLE IF NOT EXISTS users_to_outfits (
-  username VARCHAR(100) NOT NULL REFERENCES users (username),
+  user_id INTEGER NOT NULL REFERENCES users (username),
   outfit_id INTEGER NOT NULL REFERENCES outfits (outfit_id)
 );
 
