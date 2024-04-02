@@ -1,14 +1,32 @@
-<div style = "margin-left:25%; margin-right: 25%; margin-top: 5%; border: 1px solid; border-radius: 25px; padding: 2%; height: 50%">
-    <h3>Register</h3>
-    <form action = "/register" method = "post">
-        <div class = "mb-2">
-            <label class = "form-label" for = "username">Username</label>
-            <input class = "form-control" name = "username" id = "username" type = "text">
-
-            <label class = "form-label" for = "password">Password</label>
-            <input class = "form-control" name = "password" id = "password" type = "password">
-        </div>
-        <button type = "submit" class = "btn btn-primary">Register</button>
-        <div class = "form-text">Already have an account? <a href = "/login">Login</a></div>
-    </form>
+<div class = "shadow-lg p-4 rounded border bg-body" style = "margin: auto; height: 60%; width: 50%">
+    <div>
+        <h3>Register</h3>
+    </div>
+    <hr>
+    <div>
+        <form class = "needs-validation">
+            <div class = "mb-2">
+                <div class = "row g-3 mb-2">
+                    <div class = "col">
+                        <label class = "form-label" for = "firstName">First Name</label>
+                        <input class = "form-control" name = "firstName" id = "firstName" type = "text" placeholder="Enter your first name..." required>
+                    </div>
+                    <div class = "col">
+                        <label class = "form-label" for = "lastName">Last Name</label>
+                        <input class = "form-control" name = "lastName" id = "lastName" type = "text" placeholder="Enter your last name..." required>
+                    </div>
+                </div>
+                <div class = "col-12 mb-2">
+                    <label class = "form-label" for = "username">Username</label>
+                    <input class = "form-control" name = "username" id = "username" placeholder="Enter your username..." type = "text" required>
+                </div>
+                <div class = "col-12 mb-2">
+                    <label class = "form-label" for = "password">Password</label>
+                    <input class = "form-control" name = "password" id = "password" placeholder="Enter your password..." type = "password" required>
+                </div>
+            </div>
+            <button type = "submit" class = "btn btn-primary mb-2">Register</button>
+            <div class = "form-text">Already have an account? <a href = "/login">Login</a></div>
+        </form>
+    </div>
 </div>
