@@ -53,6 +53,7 @@ describe("Testing Add User API", () => {
         done();
       });
   });
+  
   it("negative : /register", (done) => {
     chai
       .request(server)
@@ -71,6 +72,7 @@ describe("Testing Add User API", () => {
   });
 });
 
+<<<<<<< HEAD
 describe('Testing Render', () => {
     // Sample test case given to test /test endpoint.
     it('test "/accountDetails" route should render with an html response', done => {
@@ -84,5 +86,20 @@ describe('Testing Render', () => {
         });
     });
   });
+=======
+describe('Testing Redirect', () => {
+  // Sample test case given to test /test endpoint.
+  it('/ route should redirect to /login with 302 HTTP status code', done => {
+    chai
+      .request(server)
+      .get('/')
+      .end((err, res) => {
+        res.should.have.status(302); // Expecting a redirect status code
+        res.should.redirectTo(/^.*127\.0\.0\.1.*\/login$/); // Expecting a redirect to /login with the mentioned Regex
+        done();
+      });
+  });
+});
+>>>>>>> 979a453826f77a0f50ef7ddc2c0af1ca4fc4c3e3
 
 // ********************************************************************************
