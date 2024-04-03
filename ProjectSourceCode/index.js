@@ -80,7 +80,7 @@ app.get('/welcome', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.redirect('/gallery'); 
+    res.redirect('/login'); 
 });
 
 app.get('/gallery', (req, res) => {
@@ -101,6 +101,26 @@ app.get('/login', (req, res) => {
 
 app.get('/register', (req, res) => {
   res.render('pages/register')
+});
+
+app.post('/register', async (req, res) => {
+  //hash the password using bcrypt library
+  const hash = await bcrypt.hash(req.body.password, 10);
+
+  // To-DO: Insert username and hashed password into the 'users' table
+  const user = req.body.username;
+  const first_name = req.body.firstName;
+  const last_name = req.body.lastName;
+  var query = `INSERT INTO users (username, password, first_name, last_name) VALUES ('${user}', '${hash}', '${first_name}', '${last_name}');`;
+  db.any(query)
+  .then(data =>{
+    res.redirect('/login');
+  })
+  .catch(err => {
+    console.log(err);
+    res.redirect('/register');
+  });
+
 });
 
 app.get('/logout', (req, res) => {
