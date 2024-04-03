@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
   user_id SERIAL PRIMARY KEY,
-  username VARCHAR(100) UNIQUE PRIMARY KEY,
+  username VARCHAR(100) UNIQUE,
   password VARCHAR(100) NOT NULL,
   first_name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50) NOT NULL
@@ -32,7 +32,6 @@ CREATE TABLE outfits (
   image_url VARCHAR(200) NOT NULL,
   link VARCHAR(200),
   description VARCHAR(200),
-  brand VARCHAR(50)
 );
 
 DROP TABLE IF EXISTS users_to_items;
@@ -43,7 +42,7 @@ CREATE TABLE IF NOT EXISTS users_to_items (
 
 DROP TABLE IF EXISTS users_to_outfits;
 CREATE TABLE IF NOT EXISTS users_to_outfits (
-  user_id INTEGER NOT NULL REFERENCES users (username),
+  user_id INTEGER NOT NULL REFERENCES users (user_id),
   outfit_id INTEGER NOT NULL REFERENCES outfits (outfit_id)
 );
 
