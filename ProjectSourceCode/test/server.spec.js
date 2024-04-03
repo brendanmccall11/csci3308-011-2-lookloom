@@ -53,25 +53,6 @@ describe("Testing Add User API", () => {
         done();
       });
   });
-});
-
-describe("Testing Add User API", () => {
-  it("positive : /register", (done) => {
-    chai
-      .request(server)
-      .post("/register")
-      .send({
-        username: "MyWife",
-        password: "gangang",
-        firstName: "Your",
-        lastName: "Mother",
-      })
-      .end((err, res) => {
-        expect(res).to.have.status(200);
-        expect(res.body.message).to.equals("Success");
-        done();
-      });
-  });
   it("negative : /register", (done) => {
     chai
       .request(server)
