@@ -91,7 +91,7 @@ app.get('/accountDetails', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-  res.render('pages/gallery')
+  res.render('pages/login')
 });
 
 app.get('/register', (req, res) => {

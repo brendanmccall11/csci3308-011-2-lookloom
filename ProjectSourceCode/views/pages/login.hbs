@@ -1,15 +1,20 @@
-<div style = "margin-left:25%; margin-right: 25%; margin-top: 5%; border: 1px solid; border-radius: 25px; padding: 2%; height: 50%">
-    {{> message}}
+{{> message}}
+<div class = "shadow-lg p-4 rounded border bg-body" style = "margin: auto; width: 50%">
     <h3>Login</h3>
-    <form action = "/login" method = "post">
-        <div class = "mb-2">
-            <label class = "form-label" for = "username">Username</label>
-            <input class = "form-control" name = "username" id = "username" type = "text">
+    <hr> 
+    <form action = "/login" method = "post" class = "needs-validation">
+        <div class = "mb-3">
+            <div class = "mb-2">
+                <label class = "form-label" for = "username">Username</label>
+                <input class = "form-control" name = "username" id = "username" type = "text" required>
+            </div>
 
             <label class = "form-label" for = "password">Password</label>
-            <input class = "form-control" name = "password" id = "password" type = "password">
+            <input class = "form-control" name = "password" id = "password" type = "password" required>
         </div>
-        <button type = "submit" class = "btn btn-primary">Login</button>
+        <div class = "mb-2">
+            <button type = "submit" class = "btn btn-primary">Login</button>
+        </div>
         <div class = "form-text">Don't have an account? <a href = "/register">Register</a></div>
     </form>
 </div>
