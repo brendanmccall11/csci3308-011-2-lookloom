@@ -114,7 +114,7 @@ app.post('/register', async (req, res) => {
   var query = `INSERT INTO users (username, password, first_name, last_name) VALUES ('${user}', '${hash}', '${first_name}', '${last_name}');`;
   db.any(query)
   .then(data =>{
-    res.status(200).redirect('/login');
+    res.status(200).message("Success").redirect('/login');
   })
   .catch(err => {
     console.log(err);
