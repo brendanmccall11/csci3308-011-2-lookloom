@@ -74,6 +74,11 @@ app.use(
 // <!-- Section 4 : API Routes -->
 // *****************************************************
 
+// THIS ENDPOINT IS FOR LAB 11
+app.get('/welcome', (req, res) => {
+  res.json({status: 'success', message: 'Welcome!'});
+});
+
 app.get('/', (req, res) => {
     res.redirect('/gallery'); 
 });
@@ -105,5 +110,5 @@ app.get('/logout', (req, res) => {
 // <!-- Section 5 : Start Server-->
 // *****************************************************
 // starting the server and keeping the connection open to listen for more requests
-app.listen(3000);
+module.exports = app.listen(3000); // CHANGED THIS FOR LAB 11
 console.log('Server is listening on port 3000');
