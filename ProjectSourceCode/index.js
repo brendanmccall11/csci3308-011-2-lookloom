@@ -125,7 +125,7 @@ app.post('/register', async (req, res) => {
   })
   .catch(err => {
     res.status(400).render('pages/register', {
-      message: "Failed to register. Please try Again"
+      message: "Failed to register. Please try again."
     });
   });
 });
