@@ -92,6 +92,10 @@ app.get('/closet', (req, res) => {
   res.render('pages/closet')
 });
 
+app.get('/outfit', (req, res) => {
+  res.render('pages/outfit')
+});
+
 app.get('/accountDetails', (req, res) => {
     res.render('pages/accountDetails');
 });

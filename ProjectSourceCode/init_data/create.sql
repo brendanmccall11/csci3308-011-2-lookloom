@@ -31,8 +31,7 @@ CREATE TABLE outfits (
   price SMALLINT,
   image_url VARCHAR(200) NOT NULL,
   link VARCHAR(200),
-  description VARCHAR(200),
-  brand VARCHAR(50)
+  description VARCHAR(200)
 );
 
 DROP TABLE IF EXISTS users_to_items;
