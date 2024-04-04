@@ -80,7 +80,7 @@ app.get('/welcome', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.status(302).redirect('/login'); 
+    res.redirect('/login'); 
 });
 
 app.get('/gallery', (req, res) => {
@@ -111,16 +111,18 @@ app.post('/register', async (req, res) => {
   const user = req.body.username;
   const first_name = req.body.firstName;
   const last_name = req.body.lastName;
-  var query = `INSERT INTO users (username, password, first_name, last_name) VALUES ('${user}', '${hash}', '${first_name}', '${last_name}');`;
-  db.any(query)
+  var query = `INSERT INTO users (username, password, first_name, last_name) VALUES ($1, $2, $3, $4);`;
+  db.any(query, [user, hash, first_name, last_name])
   .then(data =>{
-    res.status(200).message("Success").redirect('/login');
+    res.status(200).render('pages/login', {
+      message: "Successfully registered!",
+    });
   })
   .catch(err => {
-    console.log(err);
-    res.status(400).redirect('/register');
+    res.status(400).render('pages/register', {
+      message: "Failed to register. Please try Again"
+    });
   });
-
 });
 
 app.get('/logout', (req, res) => {
