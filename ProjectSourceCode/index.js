@@ -54,6 +54,7 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
+app.use(express.static('public'))
 
 // initialize session variables
 app.use(
@@ -114,7 +115,7 @@ app.post('/register', async (req, res) => {
   var query = `INSERT INTO users (username, password, first_name, last_name) VALUES ('${user}', '${hash}', '${first_name}', '${last_name}');`;
   db.any(query)
   .then(data =>{
-    res.status(200).redirect('/login');
+    res.status(200).message("Success").redirect('/login');
   })
   .catch(err => {
     console.log(err);

@@ -36,7 +36,7 @@ describe("Server!", () => {
 // Explanation: The testcase will call the /add_user API with the following input
 // and expects the API to return a status of 200 along with the "Success" message.
 
-describe("Testing Add User API", () => {
+describe("Testing Register", () => {
   it("positive : /register", (done) => {
     chai
       .request(server)
@@ -59,7 +59,7 @@ describe("Testing Add User API", () => {
       .request(server)
       .post("/register")
       .send({
-        username: "Johndoey",
+        username: 10,
         password: "i_am_doe",
         firstName: "John",
         lastName: "Doe",
@@ -72,21 +72,6 @@ describe("Testing Add User API", () => {
   });
 });
 
-<<<<<<< HEAD
-describe('Testing Render', () => {
-    // Sample test case given to test /test endpoint.
-    it('test "/accountDetails" route should render with an html response', done => {
-      chai
-        .request(server)
-        .get('/accountDetails') // for reference, see lab 8's login route (/login) which renders home.hbs
-        .end((err, res) => {
-          res.should.have.status(200); // Expecting a success status code
-          res.should.be.html; // Expecting a HTML response
-          done();
-        });
-    });
-  });
-=======
 describe('Testing Redirect', () => {
   // Sample test case given to test /test endpoint.
   it('/ route should redirect to /login with 302 HTTP status code', done => {
@@ -100,6 +85,19 @@ describe('Testing Redirect', () => {
       });
   });
 });
->>>>>>> 979a453826f77a0f50ef7ddc2c0af1ca4fc4c3e3
+
+describe('Testing Render', () => {
+    // Sample test case given to test /test endpoint.
+    it('test "/accountDetails" route should render with an html response', done => {
+      chai
+        .request(server)
+        .get('/accountDetails') // for reference, see lab 8's login route (/login) which renders home.hbs
+        .end((err, res) => {
+          res.should.have.status(200); // Expecting a success status code
+          res.should.be.html; // Expecting a HTML response
+          done();
+        });
+    });
+  });
 
 // ********************************************************************************
