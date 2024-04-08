@@ -75,13 +75,20 @@ app.use(
 // <!-- Section 4 : API Routes -->
 // *****************************************************
 
+const user = {
+  username: undefined,
+  password: undefined,
+  firstName: undefined,
+  lastName: undefined
+};
+
 // THIS ENDPOINT IS FOR LAB 11
 app.get("/welcome", (req, res) => {
   res.json({ status: "success", message: "Welcome!" });
 });
 
 app.get("/", (req, res) => {
-  res.redirect("/login");
+  res.redirect(302, "/login");
 });
 
 app.get("/gallery", (req, res) => {
@@ -221,9 +228,58 @@ app.post("/register", async (req, res) => {
     .catch((err) => {
       res.status(400).render("pages/register", {
         message: "Failed to register. Please try again.",
+        error: true
       });
     });
 });
+
+app.post('/login', (req, res) => {
+  const username = req.body.username;
+  console.log(username)
+  var query = "SELECT * FROM users WHERE username = $1;";
+  console.log(query)
+
+  db.any(query, [username])
+    .then(async data => {
+      console.log(data)
+      user.username = username;
+      user.password = data[0].password;
+      user.first_name = data[0].first_name;
+      user.last_name = data[0].last_name;
+      // check if password from request matches with password in DB
+      const match = await bcrypt.compare(req.body.password, user.password);
+
+      if(match) {
+        //save user details in session like in lab 7
+        req.session.user = user;
+        req.session.save();
+        res.redirect('/gallery');
+      }
+      else {
+        res.status(400).render('pages/login', {
+          message: "Incorrect username or password.",
+          error: true
+        });
+      }
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(400).render('pages/register', {
+        message: "Account not found. Please register.",
+        error: true
+      })
+    })
+});
+
+const auth = (req, res, next) => {
+  if (!req.session.user) {
+    // Default to login page.
+    return res.redirect('/login');
+  }
+  next();
+};
+
+app.use(auth);
 
 app.get("/logout", (req, res) => {
   res.render("pages/logout");
