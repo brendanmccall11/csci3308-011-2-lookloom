@@ -79,7 +79,7 @@ const user = {
   username: undefined,
   password: undefined,
   firstName: undefined,
-  lastName: undefined
+  lastName: undefined,
 };
 
 // THIS ENDPOINT IS FOR LAB 11
@@ -194,7 +194,7 @@ app.get("/closet/Accessories", async (req, res) => {
   }
 });
 
-app.get("/outfit", (req, res) => {
+app.get("/outfits", (req, res) => {
   res.render("pages/outfit");
 });
 
@@ -228,20 +228,20 @@ app.post("/register", async (req, res) => {
     .catch((err) => {
       res.status(400).render("pages/register", {
         message: "Failed to register. Please try again.",
-        error: true
+        error: true,
       });
     });
 });
 
-app.post('/login', (req, res) => {
+app.post("/login", (req, res) => {
   const username = req.body.username;
-  console.log(username)
+  console.log(username);
   var query = "SELECT * FROM users WHERE username = $1;";
-  console.log(query)
+  console.log(query);
 
   db.any(query, [username])
-    .then(async data => {
-      console.log(data)
+    .then(async (data) => {
+      console.log(data);
       user.username = username;
       user.password = data[0].password;
       user.first_name = data[0].first_name;
@@ -249,32 +249,31 @@ app.post('/login', (req, res) => {
       // check if password from request matches with password in DB
       const match = await bcrypt.compare(req.body.password, user.password);
 
-      if(match) {
+      if (match) {
         //save user details in session like in lab 7
         req.session.user = user;
         req.session.save();
-        res.redirect('/gallery');
-      }
-      else {
-        res.status(400).render('pages/login', {
+        res.redirect("/gallery");
+      } else {
+        res.status(400).render("pages/login", {
           message: "Incorrect username or password.",
-          error: true
+          error: true,
         });
       }
     })
-    .catch(err => {
-      console.log(err)
-      res.status(400).render('pages/register', {
+    .catch((err) => {
+      console.log(err);
+      res.status(400).render("pages/register", {
         message: "Account not found. Please register.",
-        error: true
-      })
-    })
+        error: true,
+      });
+    });
 });
 
 const auth = (req, res, next) => {
   if (!req.session.user) {
     // Default to login page.
-    return res.redirect('/login');
+    return res.redirect("/login");
   }
   next();
 };
