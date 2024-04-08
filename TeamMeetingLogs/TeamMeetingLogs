@@ -1,30 +1,44 @@
 3/18/24 Meeting with TA
+
 - Decided on RapidAPI (Axesso) that is connected to Amazon Webstore to get information about products
-    - Searches based on keywords and returns the product and its details (product name, image, etc.)
+  - Searches based on keywords and returns the product and its details (product name, image, etc.)
 - Basic structure is a gallery where you can browse/search for items and closet where you can save outfits
 - More features that could be implemented:
-    - Being able to share and rate other outfits
-        - Maybe a group chat or social media type sharing method
-        - If not, maybe just a link for sharing
-    - Expanding beyond the Amazon API 
-        - Maybe the H&M API
-        - Fashion API where you can submit photo and find the most similar clothes
+  - Being able to share and rate other outfits
+    - Maybe a group chat or social media type sharing method
+    - If not, maybe just a link for sharing
+  - Expanding beyond the Amazon API
+    - Maybe the H&M API
+    - Fashion API where you can submit photo and find the most similar clothes
 - Adding grouping and sharing outfits as part of the feature list
 - Fashion API will be a “nice-to-have”
-- Can start with coding and adding pages 
+- Can start with coding and adding pages
 - Planning on meeting on Thursday this week
 - This week’s evaluation is from Monday to Friday – make sure deliverables are uploaded by then
 - Transition to Github project board from Trello
 
 4/1/24 Meeting with TA
--Make sure all deliverables are in by Friday 
+-Make sure all deliverables are in by Friday
 -Make sure all 6 of us contribute
 -Target for next week
-    -Develop index.js
-    -Login/Logout
-    -Gallery page HTML
-    -Closet page HTML
-    -Partials for the sidebar
-    -API integration
-        -Have a general website working
+-Develop index.js
+-Login/Logout
+-Gallery page HTML
+-Closet page HTML
+-Partials for the sidebar
+-API integration
+-Have a general website working
 -Make sure all branches are merged with the main branch
+
+4/8/24 Meeting with TA
+-Will add more features this week
+    -More API will be integrated
+    -Make sure APIs all work together
+    -Sorting and filtering for search bar for outfits/items
+    -Grouping of oufits in the closet/add to the closet
+    -At least 3 APIs other than Amazon
+-Multiple users?
+    -Like, Follow, Add, etc.
+    -Favoriting items?
+Testing
+-use .redirect(0) to check the status whether it's 302 or 200
