@@ -49,7 +49,7 @@ describe("Testing Register", () => {
       })
       .end((err, res) => {
         expect(res).to.have.status(200);
-        //expect(res.body.message).to.equals("Success");
+        //expect(res.body.message).to.equals("Successfully registered!");
         done();
       });
   });
@@ -65,7 +65,7 @@ describe("Testing Register", () => {
       })
       .end((err, res) => {
         expect(res).to.have.status(400); // Expecting a 400 Bad Request status code
-        //expect(res.body.message).to.equals("Invalid username or password"); // Expecting an appropriate error message
+        //expect(res.body.message).to.equals("Failed to register. Please try again."); // Expecting an appropriate error message
         done();
       });
   });
@@ -78,7 +78,7 @@ describe('Testing Redirect', () => {
       .request(server)
       .get('/')
       .end((err, res) => {
-        res.should.have.status(302); // Expecting a redirect status code
+        expect(res).to.have.status(302); // Expecting a redirect status code
         res.should.redirectTo(/^.*127\.0\.0\.1.*\/login$/); // Expecting a redirect to /login with the mentioned Regex
         done();
       });
@@ -92,11 +92,48 @@ describe('Testing Render', () => {
         .request(server)
         .get('/accountDetails') // for reference, see lab 8's login route (/login) which renders home.hbs
         .end((err, res) => {
-          res.should.have.status(200); // Expecting a success status code
+          expect(res).to.have.status(200); // Expecting a success status code
           res.should.be.html; // Expecting a HTML response
           done();
         });
     });
   });
+
+  // create a cookies variable
+var cookies;
+
+describe('Testing Login', () => {
+  // Sample test case given to test / endpoint.
+  it('Successful Login', done => {
+    chai
+      .request(server)
+      .post('/login')
+      .send({
+        username: "Yippee",
+        password: "gangang",
+      })
+      .end((err, res) => {
+        // expect statements
+        expect(res).to.have.status(200);
+        //cookies = res.headers['set-cookie'].pop().split(';')[0]; // save the cookies
+        done();
+      });
+  });
+
+  it('Negative : /login. Checking wrong password', done => {
+    chai
+      .request(server)
+      .post('/login')
+      .send({
+        username: "Yippee",
+        password: "uhoh",
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        // expect(res.body.message).to.equals('Incorrect username or password.');
+        done();
+      });
+  });
+});
 
 // ********************************************************************************

@@ -1,58 +1,66 @@
-{{!-- Note to self: the position-fixed in the class attribute below is to keep the sidebar sticky, can delete later if causing issues --}}
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-light position-fixed" style="width: 12.5%; height:100%;">
-    <ul class="nav nav-pills flex-column mb-auto">
-      <li class="nav-item" style="font-size: 25px">
-        <a href="/gallery" class="nav-link active" aria-current="page">
-          Gallery
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="/outfits" class="nav-link link-dark" aria-current="page" style="font-size: 25px">
-          Outfits
-        </a>
-      </li>
-      <li>
-        <a href="/closet" class="nav-link link-dark" style="font-size: 25px">
-          Closet
-        </a>
+{{! Note to self: the position-fixed in the class attribute below is to keep the sidebar sticky, can delete later if causing issues }}
+<div
+  class="d-flex flex-column flex-shrink-0 p-3 bg-light position-fixed"
+  style="width: 12.5%; height:100%;"
+>
+  <ul class="nav nav-pills flex-column mb-auto">
+    <li class="nav-item" style="font-size: 25px">
+      <a href="/gallery" class="nav-link active" aria-current="page">
+        Gallery
+      </a>
+    </li>
+    <li class="nav-item">
+      <a
+        href="/outfits"
+        class="nav-link link-dark"
+        aria-current="page"
+        style="font-size: 25px"
+      >
+        Outfits
+      </a>
+    </li>
+    <li>
+      <a href="/closet" class="nav-link link-dark" style="font-size: 25px">
+        Closet
+      </a>
 
-        {{!-- Later, we'll need to use the #each handlebars tag for each category of clothing once we have the SQL ready. I just put in some placeholder categories--}}
+      {{! Later, we'll need to use the #each handlebars tag for each category of clothing once we have the SQL ready. I just put in some placeholder categories}}
 
-        <ul class="nav nav-pills flex-column mb-auto" style="padding-left: 20px">
-          <li class="nav-item">
-            <a href="#" class="nav-link link-dark">
-              Tops
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link link-dark">
-              Bottoms
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link link-dark">
-              Dresses
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link link-dark">
-              Shoes
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link link-dark">
-              Accessories
-            </a>
-          </li>
-        </ul>
-      </li>
-    </ul>
-    <ul class="nav nav-pills flex-column ml-auto p-2" style="font-size: 20px;">
+      <ul class="nav nav-pills flex-column mb-auto" style="padding-left: 20px">
         <li class="nav-item">
-          <a href="/accountSettings" class="nav-link link-dark">
-              Account Settings
+          <a href="/closet/tops" class="nav-link link-dark">
+            Tops
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/closet/bottoms" class="nav-link link-dark">
+            Bottoms
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/closet/dresses" class="nav-link link-dark">
+            Dresses
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/closet/shoes" class="nav-link link-dark">
+            Shoes
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/closet/accessories" class="nav-link link-dark">
+            Accessories
           </a>
         </li>
       </ul>
-    <hr>
-  </div>
+    </li>
+  </ul>
+  <ul class="nav nav-pills flex-column ml-auto p-2" style="font-size: 20px;">
+    <li class="nav-item">
+      <a href="/accountDetails" class="nav-link link-dark">
+        Account Settings
+      </a>
+    </li>
+  </ul>
+  <hr />
+</div>
