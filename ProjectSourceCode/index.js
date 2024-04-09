@@ -88,7 +88,7 @@ app.get("/welcome", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.redirect(302, "/login");
+  res.redirect("/login");
 });
 
 app.get("/gallery", (req, res) => {
