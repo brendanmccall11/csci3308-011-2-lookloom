@@ -1,64 +1,72 @@
-{{!-- Note to self: the position-fixed in the class attribute below is to keep the sidebar sticky, can delete later if causing issues --}}
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-light position-fixed" style="width: 12.5%; height:100%;">
-    <ul class="nav nav-pills flex-column mb-auto">
-      <li class="nav-item" style="font-size: 25px">
-        <a href="/gallery" class="nav-link active" aria-current="page">
-          Gallery
-        </a>
-      </li>
-      <li>
-        <a href="/closet" class="nav-link link-dark" style="font-size: 25px">
-          Closet
-        </a>
-
-        {{!-- Later, we'll need to use the #each handlebars tag for each category of clothing once we have the SQL ready. I just put in some placeholder categories--}}
-
-        <ul class="nav nav-pills flex-column mb-auto" style="padding-left: 20px">
-          <li class="nav-item">
-            <a href="#" class="nav-link link-dark">
-              Hats
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link link-dark">
-              Jewelry
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link link-dark">
-              Tops
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link link-dark">
-              Pants
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link link-dark">
-              Skirts
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link link-dark">
-              Shoes
-            </a>
-          </li>
-        </ul>
-      </li>
-    </ul>
-    <hr>
-    <div class="dropdown" style="bottom: 10%">
-      <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-        <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-        <strong>mdo</strong>
+{{! Note to self: the position-fixed in the class attribute below is to keep the sidebar sticky, can delete later if causing issues }}
+<div
+  class="d-flex flex-column flex-shrink-0 p-3 bg-light position-fixed"
+  style="width: 12.5%; height:100%;"
+>
+  <ul class="nav nav-pills flex-column mb-auto">
+    <li class="nav-item" style="font-size: 25px">
+      <a href="/gallery" class="nav-link active" aria-current="page">
+        Gallery
       </a>
-      <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-        <li><a class="dropdown-item" href="#">New project...</a></li>
-        <li><a class="dropdown-item" href="#">Settings</a></li>
-        <li><a class="dropdown-item" href="#">Profile</a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="#">Sign out</a></li>
+    </li>
+    <li class="nav-item">
+      <a
+        href="/outfits"
+        class="nav-link link-dark"
+        aria-current="page"
+        style="font-size: 25px"
+      >
+        Outfits
+      </a>
+    </li>
+    <li>
+      <a href="/closet" class="nav-link link-dark" style="font-size: 25px">
+        Closet
+      </a>
+
+      {{! Later, we'll need to use the #each handlebars tag for each category of clothing once we have the SQL ready. I just put in some placeholder categories}}
+
+      <ul class="nav nav-pills flex-column mb-auto" style="padding-left: 20px">
+        <li class="nav-item">
+          <a href="/closet/tops" class="nav-link link-dark">
+            Tops
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/closet/bottoms" class="nav-link link-dark">
+            Bottoms
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/closet/dresses" class="nav-link link-dark">
+            Dresses
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/closet/shoes" class="nav-link link-dark">
+            Shoes
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/closet/accessories" class="nav-link link-dark">
+            Accessories
+          </a>
+        </li>
       </ul>
-    </div>
-  </div>
+    </li>
+  </ul>
+  <ul class="nav nav-pills flex-column ml-auto p-2" style="font-size: 20px;">
+    <li class="nav-item">
+      <a href="/accountDetails" class="nav-link link-dark">
+        Account Settings
+      </a>
+    </li>
+  </ul>'<ul class="nav nav-pills flex-column ml-auto p-2" style="font-size: 15px;">
+    <li class="nav-item">
+      <a href="/logout" class="nav-link link-dark">
+        Log Out
+      </a>
+    </li>
+  </ul>'
+  <hr />
+</div>

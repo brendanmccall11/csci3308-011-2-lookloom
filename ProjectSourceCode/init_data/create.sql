@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
   user_id SERIAL PRIMARY KEY,
-  username VARCHAR(100) UNIQUE,
+  username VARCHAR(100) UNIQUE NOT NULL,
   password VARCHAR(100) NOT NULL,
   first_name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50) NOT NULL
@@ -31,8 +31,7 @@ CREATE TABLE outfits (
   price SMALLINT,
   image_url VARCHAR(200) NOT NULL,
   link VARCHAR(200),
-  description VARCHAR(200),
-  brand VARCHAR(50)
+  description VARCHAR(200)
 );
 
 DROP TABLE IF EXISTS users_to_items;
