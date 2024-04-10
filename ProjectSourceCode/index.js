@@ -54,11 +54,7 @@ app.engine("hbs", hbs.engine);
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "views"));
 app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
-<<<<<<< HEAD
-app.use(express.static('public'));
-=======
 app.use(express.static("public"));
->>>>>>> main
 
 // initialize session variables
 app.use(
@@ -293,7 +289,7 @@ app.get('/logout', (req, res) => {
 });
 
 // *****************************************************
-// <!-- Section 6 : Start Server-->
+// <!-- Section 5 : Start Server-->
 // *****************************************************
 // starting the server and keeping the connection open to listen for more requests
 module.exports = app.listen(3000); // CHANGED THIS FOR LAB 11
