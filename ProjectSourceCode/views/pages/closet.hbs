@@ -48,16 +48,24 @@
                     <p class="card-text">${{this.price}}</p>
                     <p class="card-text">{{this.description}}</p>
                     <p class="card-text">Brand: {{this.brand}}</p>
+                    <button type="button" class="addToOutfit btn btn-primary">Add to Outfit</button>
                   </div>
                 </div>
               </div>
             {{/each}}
+            <div id="closetModal" class="modal">
+              <div class="modal-content">
+                  <span class="close">&times;</span>
+                  <p>Some text in the Modal..</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Add Bootstrap JS CDN -->
+    <script src="../../js/closetScript.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
       integrity="sha384-oBqDVmMz4fnFO9gybB5IXNxFwWQfE7u8Lj+XJHAxKlXiG/8rsrtpb6PEdzD828Ii"
