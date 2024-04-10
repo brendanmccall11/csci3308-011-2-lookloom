@@ -91,6 +91,85 @@ app.get("/", (req, res) => {
   res.redirect("/login");
 });
 
+
+app.get("/login", (req, res) => {
+  res.render("pages/login");
+});
+
+app.get("/register", (req, res) => {
+  res.render("pages/register");
+});
+
+app.post("/register", async (req, res) => {
+  //hash the password using bcrypt library
+  const hash = await bcrypt.hash(req.body.password, 10);
+
+  // Insert username and hashed password into the 'users' table
+  const user = req.body.username;
+  const first_name = req.body.firstName;
+  const last_name = req.body.lastName;
+  var query = `INSERT INTO users (username, password, first_name, last_name) VALUES ($1, $2, $3, $4);`;
+  db.any(query, [user, hash, first_name, last_name])
+    .then((data) => {
+      res.status(200).render("pages/login", {
+        message: "Successfully registered!",
+      });
+    })
+    .catch((err) => {
+      res.status(400).render("pages/register", {
+        message: "Failed to register. Please try again.",
+        error: true,
+      });
+    });
+});
+
+app.post("/login", (req, res) => {
+  const username = req.body.username;
+  console.log(username);
+  var query = "SELECT * FROM users WHERE username = $1;";
+  console.log(query);
+
+  db.any(query, [username])
+    .then(async (data) => {
+      console.log(data);
+      user.username = username;
+      user.password = data[0].password;
+      user.first_name = data[0].first_name;
+      user.last_name = data[0].last_name;
+      // check if password from request matches with password in DB
+      const match = await bcrypt.compare(req.body.password, user.password);
+
+      if (match) {
+        //save user details in session like in lab 7
+        req.session.user = user;
+        req.session.save();
+        res.redirect("/gallery");
+      } else {
+        res.status(400).render("pages/login", {
+          message: "Incorrect username or password.",
+          error: true,
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).render("pages/register", {
+        message: "Account not found. Please register.",
+        error: true,
+      });
+    });
+});
+
+const auth = (req, res, next) => {
+  if (!req.session.user) {
+    // Default to login page.
+    return res.redirect("/login");
+  }
+  next();
+};
+
+app.use(auth);
+
 app.get("/gallery", (req, res) => {
   res.render("pages/gallery");
 });
@@ -202,87 +281,13 @@ app.get("/accountDetails", (req, res) => {
   res.render("pages/accountDetails");
 });
 
-app.get("/login", (req, res) => {
-  res.render("pages/login");
+app.get('/logout', (req, res) => {
+  req.session.destroy();
+  res.render('pages/logout',{
+    message: "Logged out successfully! To access your closet and outfits, please log back in."
+  });
 });
 
-app.get("/register", (req, res) => {
-  res.render("pages/register");
-});
-
-app.post("/register", async (req, res) => {
-  //hash the password using bcrypt library
-  const hash = await bcrypt.hash(req.body.password, 10);
-
-  // Insert username and hashed password into the 'users' table
-  const user = req.body.username;
-  const first_name = req.body.firstName;
-  const last_name = req.body.lastName;
-  var query = `INSERT INTO users (username, password, first_name, last_name) VALUES ($1, $2, $3, $4);`;
-  db.any(query, [user, hash, first_name, last_name])
-    .then((data) => {
-      res.status(200).render("pages/login", {
-        message: "Successfully registered!",
-      });
-    })
-    .catch((err) => {
-      res.status(400).render("pages/register", {
-        message: "Failed to register. Please try again.",
-        error: true,
-      });
-    });
-});
-
-app.post("/login", (req, res) => {
-  const username = req.body.username;
-  console.log(username);
-  var query = "SELECT * FROM users WHERE username = $1;";
-  console.log(query);
-
-  db.any(query, [username])
-    .then(async (data) => {
-      console.log(data);
-      user.username = username;
-      user.password = data[0].password;
-      user.first_name = data[0].first_name;
-      user.last_name = data[0].last_name;
-      // check if password from request matches with password in DB
-      const match = await bcrypt.compare(req.body.password, user.password);
-
-      if (match) {
-        //save user details in session like in lab 7
-        req.session.user = user;
-        req.session.save();
-        res.redirect("/gallery");
-      } else {
-        res.status(400).render("pages/login", {
-          message: "Incorrect username or password.",
-          error: true,
-        });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(400).render("pages/register", {
-        message: "Account not found. Please register.",
-        error: true,
-      });
-    });
-});
-
-const auth = (req, res, next) => {
-  if (!req.session.user) {
-    // Default to login page.
-    return res.redirect("/login");
-  }
-  next();
-};
-
-app.use(auth);
-
-app.get("/logout", (req, res) => {
-  res.render("pages/logout");
-});
 // *****************************************************
 // <!-- Section 5 : Start Server-->
 // *****************************************************
