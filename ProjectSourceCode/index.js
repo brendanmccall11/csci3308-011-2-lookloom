@@ -273,6 +273,47 @@ app.get("/closet/Accessories", async (req, res) => {
   }
 });
 
+app.post("/closet/addYourOwn", (req, res) => {
+  const item_name = req.body.item_name;
+  const price = req.body.price;
+  const description = req.body.description;
+  const website_link = req.body.website_link;
+  const image_url = req.body.image_url;
+  const brand = req.body.brand;
+  const category = req.body.categories;
+  console.log(category);
+
+  var query = "INSERT INTO items (name, price, image_url, link, description, brand) VALUES ($1, $2, $3, $4, $5, $6);";
+  var query1 = "INSERT INTO items_to_categories (item_id, category_id) VALUES ((SELECT item_id FROM items WHERE name = $1), (SELECT category_id FROM categories WHERE category_name = $2))"
+
+  db.task('post-everything', task => {
+    return task.batch([task.any(query, [item_name, price, image_url, website_link, description, brand]), 
+      task.any(query1, [item_name, category])]);
+  })
+    .then(function (data) {
+      res.redirect("/closet")
+    })
+    .catch(async error => {
+
+      try {
+        // Fetch all items from the database
+        const items = await db.query("SELECT * FROM items");
+    
+        // Render the closet page and pass items to the template
+        res.render("pages/closet", { 
+          items,
+          message: "Failed to add. Please try again.",
+          error: true
+         });
+         
+      } catch (error) {
+        // Handle errors
+        console.error("Error fetching data:", error);
+        res.status(500).send("Internal Server Error");
+      }
+    });
+});
+
 app.get("/outfits", (req, res) => {
   res.render("pages/outfit");
 });
