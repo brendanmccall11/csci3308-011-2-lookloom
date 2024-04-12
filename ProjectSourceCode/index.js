@@ -314,7 +314,21 @@ app.post("/closet/addYourOwn", (req, res) => {
     });
 });
 
-app.get("/outfits", (req, res) => {
+app.get("/outfits", async (req, res) => {
+  try {
+    // Fetch all items from the database
+    const outfits = await db.query("SELECT * FROM outfits");
+
+    // Render the closet page and pass items to the template
+    res.render("pages/outfits", { outfits });
+  } catch (error) {
+    // Handle errors
+    console.error("Error fetching data:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get("/outfit", (req, res) => {
   res.render("pages/outfit");
 });
 
