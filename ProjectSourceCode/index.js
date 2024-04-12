@@ -305,7 +305,7 @@ app.post("/closet/addYourOwn", (req, res) => {
           message: "Failed to add. Please try again.",
           error: true
          });
-         
+
       } catch (error) {
         // Handle errors
         console.error("Error fetching data:", error);
