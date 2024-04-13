@@ -1,12 +1,14 @@
-<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
     .fixed-div {
         position: fixed;
         top: 56px;
         left: 12.5%;
         width: 87.5%;
-        height: 800px;
+        height: 500px;
         overflow-y: auto;
         padding: 30px;
         display: grid;
@@ -16,7 +18,7 @@
     .card {
         background-color: #f7f7f7;
         border: none;
-        height: 300px;
+        height: 600px;
         width: 220px;
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 1px 3px 0 rgba(0, 0, 0, 0.19);
         transition: transform 0.3s ease-in-out;
@@ -32,7 +34,7 @@
     }
     .card-img-top {
         width: 100%;
-        height: 83%;
+        height: 300px;
         padding-bottom: 5%;
         object-fit: cover;
     }
@@ -52,7 +54,25 @@
     </style>
 </head>
 <body>
+    <div>
+      {{> message}}
+    </div>
     <div class="fixed-div hover">
+        {{#each items}}
+        <div class="card">
+            <a href="{{this.link}}" class="card-link">
+                <img id="image" src="{{this.image_url}}" alt="Card Image" class="card-img-top">
+            </a>
+            <div class="card-info">
+                <div class="card-name">
+                    <h6>{{this.name}}</h6>
+                </div>
+                <div class="card-price">
+                    <p>${{this.price}}</p>
+                </div>
+            </div>
+        </div>
+        {{/each}}
         <div class="card">
             <a href="https://www.amazon.com/Womens-Summer-Dresses-Hollow-Long-Sleeve/dp/B0B7RHC3V1" class="card-link">
                 <img id="image" src="../../img/dress.jpg" alt="Card Image" class="card-img-top">
@@ -109,5 +129,6 @@
             </div>
         </div>
     </div>
-    <script src="../../js/script.js"></script>
+    <script src="../../js/galleryScript.js"></script>
 </body>
+</html>

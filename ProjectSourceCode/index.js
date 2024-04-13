@@ -170,8 +170,18 @@ const auth = (req, res, next) => {
 
 app.use(auth);
 
-app.get("/gallery", (req, res) => {
-  res.render("pages/gallery");
+app.get("/gallery", async (req, res) => {
+  try {
+    // Fetch all items from the database
+    const items = await db.query("SELECT * FROM items");
+
+    // Render the gallery page and pass items to the template
+    res.render('pages/gallery', { items });
+  } catch (error) {
+    // Handle errors
+    console.error("Error fetching data:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 app.get("/closet", async (req, res) => {
