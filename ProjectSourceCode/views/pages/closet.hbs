@@ -57,6 +57,12 @@
       height: 83%; 
       padding-bottom: 5%; 
       object-fit:cover; 
+
+      #closet-modal {
+        display: none; /* Hidden by default */
+        position: static; /* Stay in place */
+      }
+
       }
     </style>
   </head>
@@ -144,12 +150,27 @@
                 </div>
               </div>
             {{/each}}
-            <div id="closetModal" class="modal">
+            <div class="modal" tabindex="-1" id="closet-modal">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                  </div>
+                  <h5 class="modal-title" style="padding-left: 15px">Add to Outfit</h5>
+                  <div class="modal-body">
+                    {{#each outfits}}
+                      <button type="button" class="btn btn-light">{{this.outfit_name}}</button>
+                    {{/each}}
+                  </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+            {{!-- <div id="closetModal" class="modal">
               <div class="modal-content">
                   <span class="close">&times;</span>
                   <p>Some text in the Modal..</p>
               </div>
-            </div>
+            </div> --}}
           </div>
         </div>
       </div>

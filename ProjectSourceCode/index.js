@@ -178,9 +178,10 @@ app.get("/closet", async (req, res) => {
   try {
     // Fetch all items from the database
     const items = await db.query("SELECT * FROM items");
+    const outfits = await db.query("SELECT * FROM outfits");
 
     // Render the closet page and pass items to the template
-    res.render("pages/closet", { items });
+    res.render("pages/closet", { items, outfits });
   } catch (error) {
     // Handle errors
     console.error("Error fetching data:", error);

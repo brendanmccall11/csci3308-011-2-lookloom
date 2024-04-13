@@ -2,12 +2,13 @@
 // Closet Modal for Adding Item to Outfit
 // *****************************************************
 
-var closetModal = document.getElementById("closetModal");
-var addButton = document.querySelectorAll('addToOutfit');
+var closetModal = document.getElementById("closet-modal");
+var addButton = document.getElementsByClassName('addToOutfit');
+const arrButton = Array.from(addButton);
 var span = document.getElementsByClassName("close")[0];
 
 // When the user clicks on button to add item to outfit, open the modal 
-addButton.forEach(function(card) {
+arrButton.forEach(function(card) {
     card.onclick = function() {
         closetModal.style.display = "block";
     }
