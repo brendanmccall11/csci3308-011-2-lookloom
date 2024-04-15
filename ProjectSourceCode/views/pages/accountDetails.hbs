@@ -114,22 +114,23 @@
             <main>
                 <section class="form-section">
                     <h2>User Information</h2>
-                    <p>Username: <span id="username">JohnnyDoe</span></p>
-                    <p>Email: <span id="email">johndoe@example.com</span></p>
+                    <p>Username: <span id="username"></span></p>
+                    <p>Email: <span id="email"></span></p>
                 </section>
                 <section class="profile-section">
-                    <img src="path_to_profile_picture.jpg" alt="Profile Picture">
-                    <button type="button">Update Profile Picture</button>
+                    <img id="profilePicture" src="" alt="Profile Picture">
+                    <button id="updateProfilePictureBtn" type="button">Update Profile Picture</button>
                 </section>
                 <section class="friends-section">
                     <h2>Friends</h2>
+                    <div id="friendsList"></div>
                     <div class="friend-circle">JD</div>
                     <div class="friend-circle">AB</div>
                     <div class="friend-circle">EF</div>
                 </section>
-                                <section class="form-section">
+                <section class="form-section">
                     <h2>Closet Preference</h2>
-                    <form id="closetPreferenceForm" class="form-container">
+                    <form id="closetPreferenceForm" class="form-container" action="/updateClosetPreference" method="POST">
                         <label for="closetPreference">Select Closet Preference:</label>
                         <select id="closetPreference" name="closetPreference" required>
                             <option value="public">Public</option>
@@ -140,7 +141,7 @@
                 </section>
                 <section class="form-section">
                     <h2>Change Password</h2>
-                    <form id="changePasswordForm" class="form-container">
+                    <form id="changePasswordForm" class="form-container" action="/changePassword" method="POST">
                         <label for="currentPassword">Current Password:</label>
                         <input type="password" id="currentPassword" name="currentPassword" required><br>
                         <label for="newPassword">New Password:</label>
@@ -153,5 +154,43 @@
             </main>
         </div>
     </div>
+
+<script>
+    window.addEventListener('DOMContentLoaded', async () => {
+        try {
+            // Fetch user information
+            const userInfoResponse = await fetch('/getUserInfo');
+            const userData = await userInfoResponse.json();
+
+            // Update user information in the DOM
+            document.getElementById('username').innerText = userData.username;
+            document.getElementById('email').innerText = userData.email;
+
+            // Update profile picture
+            document.getElementById('profilePicture').src = userData.profilePicture;
+
+            // Fetch friends list
+            const friendsResponse = await fetch('/getFriendsList');
+            const friendsData = await friendsResponse.json();
+
+            // Update friends list in the DOM
+            const friendsList = document.getElementById('friendsList');
+            if (friendsData.length === 0) {
+                const noFriendsMessage = document.createElement('p');
+                noFriendsMessage.textContent = 'No friends added.';
+                friendsList.appendChild(noFriendsMessage);
+            } else {
+                friendsData.forEach(friend => {
+                    const friendElement = document.createElement('div');
+                    friendElement.classList.add('friend-circle');
+                    friendElement.textContent = friend.name;
+                    friendsList.appendChild(friendElement);
+                });
+            }
+        } catch (error) {
+            console.error('Error fetching user information:', error);
+        }
+    });
+</script>
 </body>
 </html>
