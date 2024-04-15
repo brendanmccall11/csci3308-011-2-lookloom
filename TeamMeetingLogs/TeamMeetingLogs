@@ -42,3 +42,13 @@
     -Favoriting items?
 Testing
 -use .redirect(0) to check the status whether it's 302 or 200
+
+4/15/24 Meeting with TA
+Dev tasks
+  -Complete Outfit page
+  -search will need to work
+  -Make sure the api works with amazon
+  -adding friends and connect with the database for account details page
+-During the demo we have to avoid running into errors on the website
+-By next week wednesday presentation slides are needed
+-Finish project report
