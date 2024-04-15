@@ -24,12 +24,13 @@ CREATE TABLE categories (
   category_name VARCHAR(100) NOT NULL UNIQUE
 );
 
+-- changed image_url to not be "NOT NULL" - Linh 4/14/24
 DROP TABLE IF EXISTS outfits;
 CREATE TABLE outfits (
   outfit_id SERIAL PRIMARY KEY,
   outfit_name VARCHAR(100) UNIQUE NOT NULL,
   price SMALLINT,
-  image_url VARCHAR(200) NOT NULL,
+  image_url VARCHAR(200),
   link VARCHAR(200),
   description VARCHAR(200)
 );

@@ -28,3 +28,21 @@ window.onclick = function(event) {
         closetModal.style.display = "none";
     }
 }
+
+function passItemIdToForm(item_id) {
+    const inputField =  document.getElementById('itemId');//get the "Location" field
+
+    inputField.value = item_id;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const addToOutfitButtons = document.querySelectorAll('.addToOutfit');
+
+    addToOutfitButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            const itemId = button.dataset.itemId; // Retrieve item ID from data attribute
+            document.getElementById('itemId').value = itemId; // Set the item ID value to the hidden input field
+        });
+    });
+});
+

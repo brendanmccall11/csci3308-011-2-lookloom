@@ -28,11 +28,14 @@ VALUES
 
 INSERT INTO outfits (outfit_name, image_url)
 VALUES
-    ('test outfit', '../../img/blouse.jpeg');
+    ('test outfit', '../../img/blouse.jpeg'),
+    ('another test outfit', '../../img/maxi-dress.jpeg');
 
 INSERT INTO items_to_outfits (item_id, outfit_id)
 VALUES
     ((SELECT item_id FROM items WHERE name = 'Floral Blouse'), (SELECT outfit_id FROM outfits WHERE outfit_name = 'test outfit')),
-    ((SELECT item_id FROM items WHERE name = 'High-Top Converse'), (SELECT outfit_id FROM outfits WHERE outfit_name = 'test outfit'));
+    ((SELECT item_id FROM items WHERE name = 'High-Top Converse'), (SELECT outfit_id FROM outfits WHERE outfit_name = 'test outfit')),
+    ((SELECT item_id FROM items WHERE name = 'Necklace'), (SELECT outfit_id FROM outfits WHERE outfit_name = 'another test outfit')),
+    ((SELECT item_id FROM items WHERE name = 'Summer Maxi Dress'), (SELECT outfit_id FROM outfits WHERE outfit_name = 'another test outfit'));
 
 \dt;

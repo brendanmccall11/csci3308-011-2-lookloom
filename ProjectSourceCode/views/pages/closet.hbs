@@ -63,8 +63,6 @@
         display: none; /* Hidden by default */
         position: static; /* Stay in place */
       }
-
-      }
     </style>
   </head>
 
@@ -146,7 +144,9 @@
                     <p class="card-text">${{this.price}}</p>
                     <p class="card-text">{{this.description}}</p>
                     <p class="card-text">Brand: {{this.brand}}</p>
-                    <button type="button" class="addToOutfit btn btn-primary">Add to Outfit</button>
+                    {{!-- <button type="button" class="addToOutfit btn btn-success" data-item-id="{{this.item_id}}" data-bs-toggle="modal" data-bs-target="#closet-modal">Add to Outfit</button> --}}
+                    {{!-- <button type="button" class="addToOutfit btn btn-success" onclick="passItemIdToForm({{this.item_id}})">Add to Outfit</button> --}}
+                    <button type="button" class="addToOutfit btn btn-success" data-item-id="{{this.item_id}}" onclick="passItemIdToForm({{this.item_id}})">Add to Outfit</button>
                   </div>
                 </div>
               </div>
@@ -165,12 +165,16 @@
                       <h5 class="modal-title">Add to Existing Outfit</h5>
                         <div class="form-group" style="padding-bottom: 20px">
                           <label>Select Existing Outfit</label>
-                            <select id="existing_outfit" class="form-control">
+                          {{!-- USE existingOutfit IN THE API ROUTE --}}
+                            <select id="existing_outfit" class="form-select" name="existingOutfit">
+                              <option value="">None</option>
                               {{#each outfits}}
-                                  <option value="{{this.outfit_name}}">{{this.outfit_name}}</option>
+                                  <option value="{{this.outfit_id}}">{{this.outfit_name}}</option>
                               {{/each}}
                             </select>
                         </div>
+
+                         <input type="hidden" id="itemId" name="itemId" value="">
 
                       <h5 class="modal-title">OR Create New Outfit</h5>
                       <div class="form-group">
@@ -184,18 +188,12 @@
                       <button type="submit" class="btn btn-primary" >Add to Outfit</button>
                     </form>
                   </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary close-button" data-bs-dismiss="modal">Close</button>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary close-button" data-bs-dismiss="modal">Close</button>
+                  </div>
                 </div>
-            </div>
-        </div>
-    </div>
-            {{!-- <div id="closetModal" class="modal">
-              <div class="modal-content">
-                  <span class="close">&times;</span>
-                  <p>Some text in the Modal..</p>
               </div>
-            </div> --}}
+            </div>
           </div>
         </div>
       </div>
