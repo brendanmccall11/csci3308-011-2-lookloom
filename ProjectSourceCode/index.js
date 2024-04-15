@@ -173,12 +173,69 @@ app.use(auth);
 app.get("/gallery", async (req, res) => {
   try {
     // Fetch all items from the database
-    const items = await db.query("SELECT * FROM items");
+    //const items = await db.query("SELECT * FROM items");
 
     // Render the gallery page and pass items to the template
-    res.render('pages/gallery', { items });
+    //res.render('pages/gallery', { items });
+    res.render('pages/gallery');
   } catch (error) {
     // Handle errors
+    console.error("Error fetching data:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get("/gallery/search", async (req, res) => {
+  try {
+    const query = req.query.q;
+
+    const keywordOptions = {
+      method: 'GET',
+      url: 'https://axesso-axesso-amazon-data-service-v1.p.rapidapi.com/amz/amazon-search-by-keyword-asin',
+      params: {
+        domainCode: 'com',
+        keyword: query,
+        page: '1',
+        excludeSponsored: 'false',
+        sortBy: 'relevanceblender',
+        withCache: 'true'
+      },
+      headers: {
+        'X-RapidAPI-Key': process.env.API_KEY,
+        'X-RapidAPI-Host': 'axesso-axesso-amazon-data-service-v1.p.rapidapi.com'
+      }
+    };
+    
+    try {
+      const keywordResponse = await axios.request(keywordOptions);
+      productAsin = keywordResponse.data.foundProducts[0];
+
+      const lookupOptions = {
+        method: 'GET',
+        url: 'https://axesso-axesso-amazon-data-service-v1.p.rapidapi.com/amz/amazon-lookup-product',
+        params: {
+          url: 'https://www.amazon.com/dp/' + productAsin + '/'
+        },
+        headers: {
+          'X-RapidAPI-Key': process.env.API_KEY,
+          'X-RapidAPI-Host': 'axesso-axesso-amazon-data-service-v1.p.rapidapi.com'
+        }
+      };
+      
+      try {
+        const lookupResponse = await axios.request(lookupOptions);
+        console.log(lookupResponse.data);
+      } catch (error) {
+        console.error(error);
+      }
+
+      console.log(keywordResponse.data);
+    } catch (error) {
+      console.error(error);
+    }
+
+    res.render('pages/gallery');
+  } catch (error) {
     console.error("Error fetching data:", error);
     res.status(500).send("Internal Server Error");
   }

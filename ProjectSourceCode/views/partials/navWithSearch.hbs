@@ -3,8 +3,8 @@
   <div class="container-fluid justify-content-left bd-highlight" style="height: 40px;">
     <img src="../../public/img/LookLoom.png" alt="LookLoom">
     <!-- <h2>LookLoom</h2> -->
-    <form class="d-flex container-fluid justify-content-center" style="max-width: 60%; margin: auto;">
-      <input class="form-control me-2" type="search" placeholder="Explore gallery..." aria-label="Search">
+    <form class="d-flex container-fluid justify-content-center" style="max-width: 60%; margin: auto;" id="searchForm" action="/gallery/search" method="get">
+      <input class="form-control me-2" type="text" id="searchInput" name="q" placeholder="Explore gallery...">
       <button type="submit" name="button" class="btn" style="display: block; background-color: #0d6efd; color: white;">Search</button>
     </form>
   </div>
