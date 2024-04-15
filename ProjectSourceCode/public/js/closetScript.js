@@ -5,7 +5,8 @@
 var closetModal = document.getElementById("closet-modal");
 var addButton = document.getElementsByClassName('addToOutfit');
 const arrButton = Array.from(addButton);
-var span = document.getElementsByClassName("close")[0];
+var closeButton = document.getElementsByClassName('close-button');
+const cButtonArr = Array.from(closeButton);
 
 // When the user clicks on button to add item to outfit, open the modal 
 arrButton.forEach(function(card) {
@@ -15,13 +16,15 @@ arrButton.forEach(function(card) {
 });
 
 // When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-    closetModal.style.display = "none";
-}
+cButtonArr.forEach(function(but) {
+    but.onclick = function() {
+        closetModal.style.display = "none";
+    }
+});
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
-    if (event.target == modal) {
+    if (event.target == closetModal) {
         closetModal.style.display = "none";
     }
 }

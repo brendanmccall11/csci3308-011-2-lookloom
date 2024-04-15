@@ -154,15 +154,39 @@
             <div class="modal" tabindex="-1" id="closet-modal">
               <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
+
                   <div class="modal-header">
+                    <h3 class="modal-title" style="padding-left: 15px">Add to Outfit</h3>
+                    <button type="button" class="btn-close close-button" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
-                  <h5 class="modal-title" style="padding-left: 15px">Add to Outfit</h5>
                   <div class="modal-body">
-                    {{#each outfits}}
-                      <button type="button" class="btn btn-light">{{this.outfit_name}}</button>
-                    {{/each}}
+                    {{!-- REMEMBER TO MAKE THE API ROUTE LATER --}}
+                    <form method="post" action="/addToOutfit" style="margin-left:auto; margin-right:auto;">
+                      <h5 class="modal-title">Add to Existing Outfit</h5>
+                        <div class="form-group" style="padding-bottom: 20px">
+                          <label>Select Existing Outfit</label>
+                            <select id="existing_outfit" class="form-control">
+                              {{#each outfits}}
+                                  <option value="{{this.outfit_name}}">{{this.outfit_name}}</option>
+                              {{/each}}
+                            </select>
+                        </div>
+
+                      <h5 class="modal-title">OR Create New Outfit</h5>
+                      <div class="form-group">
+                        <label>New Outfit Name</label>
+                        <input name="newOutfitName" type="text" class="form-control">
+                      </div>
+                      <div class="form-group">
+                        <label>New Outfit Description (optional)</label>
+                        <input name="newOutfitDescription" type="text" class="form-control">
+                      </div>
+                      <button type="submit" class="btn btn-primary" >Add to Outfit</button>
+                    </form>
                   </div>
-                <div class="modal-footer"></div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary close-button" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>

@@ -26,13 +26,13 @@ VALUES
 
 -- INSERTING SAMPLE DATA FOR OUTFITS
 
--- INSERT INTO outfits (outfit_name, image_url)
--- VALUES
---     ("test outfit", "https://miro.medium.com/v2/resize:fit:1400/1*0KFB17_NGTPB0XWyc4BSgQ.jpeg");
+INSERT INTO outfits (outfit_name, image_url)
+VALUES
+    ('test outfit', '../../img/blouse.jpeg');
 
--- INSERT INTO items_to_outfits (item_id, outfit_id)
--- VALUES
---     ((SELECT item_id FROM items WHERE name = 'Floral Blouse'), (SELECT outfit_id FROM outfits WHERE outfit_name = 'test outfit')),
---     ((SELECT item_id FROM items WHERE name = 'High-Top Converse'), (SELECT outfit_id FROM outfits WHERE outfit_name = 'test outfit'));
+INSERT INTO items_to_outfits (item_id, outfit_id)
+VALUES
+    ((SELECT item_id FROM items WHERE name = 'Floral Blouse'), (SELECT outfit_id FROM outfits WHERE outfit_name = 'test outfit')),
+    ((SELECT item_id FROM items WHERE name = 'High-Top Converse'), (SELECT outfit_id FROM outfits WHERE outfit_name = 'test outfit'));
 
 \dt;
