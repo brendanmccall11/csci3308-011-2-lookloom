@@ -1,3 +1,7 @@
+-- Insert test user
+INSERT INTO users (user_id, username, password, first_name, last_name) VALUES
+    (1, 'test', '$2b$10$1pjbz9V8tUTD/lsithLuH.bTh4Z19vsBtpN1TuAJeO.ibudeN6Sea', 'John', 'Doe');
+
 -- Insert sample data into categories table
 INSERT INTO categories (category_name) VALUES
     ('Tops'),
@@ -38,4 +42,16 @@ VALUES
     ((SELECT item_id FROM items WHERE name = 'Necklace'), (SELECT outfit_id FROM outfits WHERE outfit_name = 'another test outfit')),
     ((SELECT item_id FROM items WHERE name = 'Summer Maxi Dress'), (SELECT outfit_id FROM outfits WHERE outfit_name = 'another test outfit'));
 
+-- Sample data to correspond with test user
+INSERT INTO users_to_items (user_id, item_id) VALUES
+    (1, (SELECT item_id FROM items WHERE name = 'Floral Blouse')),
+    (1, (SELECT item_id FROM items WHERE name = 'AESkinny Jeans')),
+    (1, (SELECT item_id FROM items WHERE name = 'Summer Maxi Dress')),
+    (1, (SELECT item_id FROM items WHERE name = 'High-Top Converse')),
+    (1, (SELECT item_id FROM items WHERE name = 'Necklace'));
+
+-- Sample outfits to correspond with test user
+INSERT INTO users_to_outfits (user_id, outfit_id) VALUES
+    (1, (SELECT outfit_id FROM outfits WHERE outfit_name = 'test outfit')),
+    (1, (SELECT outfit_id FROM outfits WHERE outfit_name = 'another test outfit'));
 \dt;
