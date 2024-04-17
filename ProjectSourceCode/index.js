@@ -422,11 +422,13 @@ app.post("/closet/addYourOwn", (req, res) => {
   console.log(category);
 
   var query = "INSERT INTO items (name, price, image_url, link, description, brand) VALUES ($1, $2, $3, $4, $5, $6);";
-  var query1 = "INSERT INTO items_to_categories (item_id, category_id) VALUES ((SELECT item_id FROM items WHERE name = $1), (SELECT category_id FROM categories WHERE category_name = $2))"
+  var query1 = "INSERT INTO items_to_categories (item_id, category_id) VALUES ((SELECT item_id FROM items WHERE name = $1), (SELECT category_id FROM categories WHERE category_name = $2))";
+  var query2 = "INSERT INTO users_to_items (user_id, item_id) VALUES ((SELECT user_id FROM users WHERE username = $1), (SELECT item_id FROM items WHERE name = $2));" 
 
   db.task('post-everything', task => {
     return task.batch([task.any(query, [item_name, price, image_url, website_link, description, brand]), 
-      task.any(query1, [item_name, category])]);
+      task.any(query1, [item_name, category]),
+      task.any(query2, [user.username, item_name])]);
   })
     .then(function (data) {
       res.redirect("/closet")
@@ -534,7 +536,10 @@ app.post("/addToOutfit", async (req, res) => {
 app.get("/outfits", async (req, res) => {
   try {
     // Fetch all items from the database
-    const outfits = await db.query("SELECT * FROM outfits");
+    const outfits = await db.query(`SELECT * FROM outfits 
+    INNER JOIN users_to_outfits 
+    ON outfits.outfit_id = users_to_outfits.outfit_id
+    WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = '${user.username}')`);
 
     // Render the closet page and pass items to the template
     res.render("pages/outfits", { outfits });
