@@ -19,8 +19,11 @@ For aspiring fashionistas, who are looking to bring their outfit ideas to life, 
 ## Technology Stack
 HTML, CSS, Handlebars, Javascript, Node.js, PostgreSQL
 
-## How to Run the Application
-If you are trying to run this locally, clone the repository. Make sure you have the correct .env file and make sure Docker is installed. Go to the ProjectSourceCode folder and run docker compose up in the terminal. Navigate to http://localhost:3000/ to try out the website. Otherwise, if there is a working link, please use the link. 
+## Prerequesites to Run the Application 
+Make sure you have Docker installed if you are running the website locally.
+
+## How to Run the Application Locally
+If you are trying to run this locally, clone the repository and make sure you have the correct .env file. Go to the ProjectSourceCode folder and run docker compose up in the terminal. Navigate to http://localhost:3000/ to try out the website. Otherwise, if there is a working link, please use the link. 
 
 ## How to Run Tests
 In the docker-compose.yaml file change the command from 'npm start' to 'npm run testandrun'. Then, in the terminal, run docker compose up to run the tests and see the results.
