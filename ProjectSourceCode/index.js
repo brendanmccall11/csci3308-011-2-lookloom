@@ -170,7 +170,7 @@ const auth = (req, res, next) => {
 
 app.use(auth);
 
-/*app.get("/gallery", async (req, res) => {
+app.get("/gallery", async (req, res) => {
   try {
     // Fetch all items from the database
     //const items = await db.query("SELECT * FROM items");
@@ -185,7 +185,7 @@ app.use(auth);
   }
 });
 
-app.get("/gallery/search", async (req, res) => {
+/*app.get("/gallery/search", async (req, res) => {
   try {
     const query = req.query.q;
 
