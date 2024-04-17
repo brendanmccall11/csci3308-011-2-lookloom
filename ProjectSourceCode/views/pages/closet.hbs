@@ -146,7 +146,11 @@
                     <p class="card-text">Brand: {{this.brand}}</p>
                     {{!-- <button type="button" class="addToOutfit btn btn-success" data-item-id="{{this.item_id}}" data-bs-toggle="modal" data-bs-target="#closet-modal">Add to Outfit</button> --}}
                     {{!-- <button type="button" class="addToOutfit btn btn-success" onclick="passItemIdToForm({{this.item_id}})">Add to Outfit</button> --}}
-                    <button type="button" class="addToOutfit btn btn-success" data-item-id="{{this.item_id}}" onclick="passItemIdToForm({{this.item_id}})">Add to Outfit</button>
+                    <button type="button" class="addToOutfit btn btn-success mb-2" data-item-id="{{this.item_id}}" onclick="passItemIdToForm({{this.item_id}})">Add to Outfit</button>
+                    <form action = "/closet/deleteItem" method = "post">
+                       <input type="hidden" id="item_id" name="item_id" value="{{this.item_id}}">
+                       <button type = "submit" class = "btn btn-outline-danger">Delete Item</button>
+                    </form>
                   </div>
                 </div>
               </div>
