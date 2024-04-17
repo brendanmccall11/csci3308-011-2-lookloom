@@ -244,7 +244,13 @@ app.get("/gallery", async (req, res) => {
 app.get("/closet", async (req, res) => {
   try {
     // Fetch all items from the database
-    const items = await db.query("SELECT * FROM items");
+    const items = await db.query(
+      `SELECT * FROM items 
+      INNER JOIN users_to_items 
+        ON items.item_id = users_to_items.item_id 
+      WHERE users_to_items.user_id = (SELECT user_id FROM users WHERE username = '${user.username}');`)
+
+    //const items = await db.query("SELECT * FROM items"); -- Changed this so it only selects items that belong to the user (Olivia)
     const outfits = await db.query("SELECT * FROM outfits");
 
     // Render the closet page and pass items to the template
@@ -261,8 +267,20 @@ app.get("/closet/tops", async (req, res) => {
   try {
     // Fetch items belonging to the "Tops" category
     const items = await db.query(
-      "SELECT * FROM items WHERE item_id IN (SELECT item_id FROM items_to_categories WHERE category_id = (SELECT category_id FROM categories WHERE category_name = 'Tops'))"
+      `SELECT * FROM items 
+      INNER JOIN users_to_items 
+        ON items.item_id = users_to_items.item_id 
+      INNER JOIN items_to_categories
+        ON items.item_id = items_to_categories.item_id
+      WHERE users_to_items.user_id = (SELECT user_id FROM users WHERE username = '${user.username}')
+      AND items_to_categories.category_id = (SELECT category_id FROM categories WHERE category_name = 'Tops');`
     );
+
+    // -- Changed to only select tops belonging to user
+
+    // const items = await db.query(
+    //   "SELECT * FROM items WHERE item_id IN (SELECT item_id FROM items_to_categories WHERE category_id = (SELECT category_id FROM categories WHERE category_name = 'Tops'))"
+    // );
 
     // Render the page for tops and pass the items
     res.render("pages/closet", { items });
@@ -277,9 +295,22 @@ app.get("/closet/tops", async (req, res) => {
 app.get("/closet/bottoms", async (req, res) => {
   try {
     // Fetch items belonging to the "Bottoms" category
+
     const items = await db.query(
-      "SELECT * FROM items WHERE item_id IN (SELECT item_id FROM items_to_categories WHERE category_id = (SELECT category_id FROM categories WHERE category_name = 'Bottoms'))"
+      `SELECT * FROM items 
+      INNER JOIN users_to_items 
+        ON items.item_id = users_to_items.item_id 
+      INNER JOIN items_to_categories
+        ON items.item_id = items_to_categories.item_id
+      WHERE users_to_items.user_id = (SELECT user_id FROM users WHERE username = '${user.username}')
+      AND items_to_categories.category_id = (SELECT category_id FROM categories WHERE category_name = 'Bottoms');`
     );
+
+    // -- Changed to only select bottoms belonging to user
+
+    // const items = await db.query(
+    //   "SELECT * FROM items WHERE item_id IN (SELECT item_id FROM items_to_categories WHERE category_id = (SELECT category_id FROM categories WHERE category_name = 'Bottoms'))"
+    // );
 
     // Render the page for bottoms and pass the items
     res.render("pages/closet", { items });
@@ -293,10 +324,23 @@ app.get("/closet/bottoms", async (req, res) => {
 // Route for showing Dresses
 app.get("/closet/dresses", async (req, res) => {
   try {
-    // Fetch items belonging to the "Bottoms" category
+    // Fetch items belonging to the "Dresses" category
+
     const items = await db.query(
-      "SELECT * FROM items WHERE item_id IN (SELECT item_id FROM items_to_categories WHERE category_id = (SELECT category_id FROM categories WHERE category_name = 'Dresses'))"
+      `SELECT * FROM items 
+      INNER JOIN users_to_items 
+        ON items.item_id = users_to_items.item_id 
+      INNER JOIN items_to_categories
+        ON items.item_id = items_to_categories.item_id
+      WHERE users_to_items.user_id = (SELECT user_id FROM users WHERE username = '${user.username}')
+      AND items_to_categories.category_id = (SELECT category_id FROM categories WHERE category_name = 'Dresses');`
     );
+
+    // -- Changed to only select dresses belonging to user
+
+    // const items = await db.query(
+    //   "SELECT * FROM items WHERE item_id IN (SELECT item_id FROM items_to_categories WHERE category_id = (SELECT category_id FROM categories WHERE category_name = 'Dresses'))"
+    // );
 
     // Render the page for Dresses and pass the items
     res.render("pages/closet", { items });
@@ -310,10 +354,23 @@ app.get("/closet/dresses", async (req, res) => {
 // Route for showing bottoms
 app.get("/closet/shoes", async (req, res) => {
   try {
-    // Fetch items belonging to the "Bottoms" category
+    // Fetch items belonging to the "Shoes" category
+
     const items = await db.query(
-      "SELECT * FROM items WHERE item_id IN (SELECT item_id FROM items_to_categories WHERE category_id = (SELECT category_id FROM categories WHERE category_name = 'Shoes'))"
+      `SELECT * FROM items 
+      INNER JOIN users_to_items 
+        ON items.item_id = users_to_items.item_id 
+      INNER JOIN items_to_categories
+        ON items.item_id = items_to_categories.item_id
+      WHERE users_to_items.user_id = (SELECT user_id FROM users WHERE username = '${user.username}')
+      AND items_to_categories.category_id = (SELECT category_id FROM categories WHERE category_name = 'Shoes');`
     );
+
+    // -- Changed to only select shoes belonging to user
+
+    // const items = await db.query(
+    //   "SELECT * FROM items WHERE item_id IN (SELECT item_id FROM items_to_categories WHERE category_id = (SELECT category_id FROM categories WHERE category_name = 'Shoes'))"
+    // );
 
     // Render the page for bottoms and pass the items
     res.render("pages/closet", { items });
@@ -327,10 +384,23 @@ app.get("/closet/shoes", async (req, res) => {
 // Route for showing bottoms
 app.get("/closet/Accessories", async (req, res) => {
   try {
-    // Fetch items belonging to the "Bottoms" category
+    // Fetch items belonging to the "Accessories" category
+
     const items = await db.query(
-      "SELECT * FROM items WHERE item_id IN (SELECT item_id FROM items_to_categories WHERE category_id = (SELECT category_id FROM categories WHERE category_name = 'Accessories'))"
+      `SELECT * FROM items 
+      INNER JOIN users_to_items 
+        ON items.item_id = users_to_items.item_id 
+      INNER JOIN items_to_categories
+        ON items.item_id = items_to_categories.item_id
+      WHERE users_to_items.user_id = (SELECT user_id FROM users WHERE username = '${user.username}')
+      AND items_to_categories.category_id = (SELECT category_id FROM categories WHERE category_name = 'Accessories');`
     );
+
+    // -- Changed to only select accessories belonging to user
+
+    // const items = await db.query(
+    //   "SELECT * FROM items WHERE item_id IN (SELECT item_id FROM items_to_categories WHERE category_id = (SELECT category_id FROM categories WHERE category_name = 'Accessories'))"
+    // );
 
     // Render the page for bottoms and pass the items
     res.render("pages/closet", { items });
@@ -352,11 +422,13 @@ app.post("/closet/addYourOwn", (req, res) => {
   console.log(category);
 
   var query = "INSERT INTO items (name, price, image_url, link, description, brand) VALUES ($1, $2, $3, $4, $5, $6);";
-  var query1 = "INSERT INTO items_to_categories (item_id, category_id) VALUES ((SELECT item_id FROM items WHERE name = $1), (SELECT category_id FROM categories WHERE category_name = $2))"
+  var query1 = "INSERT INTO items_to_categories (item_id, category_id) VALUES ((SELECT item_id FROM items WHERE name = $1), (SELECT category_id FROM categories WHERE category_name = $2))";
+  var query2 = "INSERT INTO users_to_items (user_id, item_id) VALUES ((SELECT user_id FROM users WHERE username = $1), (SELECT item_id FROM items WHERE name = $2));" 
 
   db.task('post-everything', task => {
     return task.batch([task.any(query, [item_name, price, image_url, website_link, description, brand]), 
-      task.any(query1, [item_name, category])]);
+      task.any(query1, [item_name, category]),
+      task.any(query2, [user.username, item_name])]);
   })
     .then(function (data) {
       res.redirect("/closet")
@@ -464,7 +536,10 @@ app.post("/addToOutfit", async (req, res) => {
 app.get("/outfits", async (req, res) => {
   try {
     // Fetch all items from the database
-    const outfits = await db.query("SELECT * FROM outfits");
+    const outfits = await db.query(`SELECT * FROM outfits 
+    INNER JOIN users_to_outfits 
+    ON outfits.outfit_id = users_to_outfits.outfit_id
+    WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = '${user.username}')`);
 
     // Render the closet page and pass items to the template
     res.render("pages/outfits", { outfits });
@@ -473,6 +548,10 @@ app.get("/outfits", async (req, res) => {
     console.error("Error fetching data:", error);
     res.status(500).send("Internal Server Error");
   }
+});
+
+app.get("/outfit", (req, res) => {
+  res.render("pages/outfit");
 });
 
 app.get("/outfit", (req, res) => {
