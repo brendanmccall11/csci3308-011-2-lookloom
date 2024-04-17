@@ -15,3 +15,15 @@ For aspiring fashionistas, who are looking to bring their outfit ideas to life, 
 - Brendan McCall (brendanmccall11)
 - Thanh Dao (ThanhThanhDao)
 - Sujay Potlapelly (supo3618)
+
+## Technology Stack
+HTML, CSS, Handlebars, Javascript, Node.js, PostgreSQL
+
+## How to Run the Application
+If you are trying to run this locally, clone the repository. Make sure you have the correct .env file and make sure Docker is installed. Go to the ProjectSourceCode folder and run docker compose up in the terminal. Navigate to http://localhost:3000/ to try out the website. Otherwise, if there is a working link, please use the link. 
+
+## How to Run Tests
+In the docker-compose.yaml file change the command from 'npm start' to 'npm run testandrun'. Then, in the terminal, run docker compose up to run the tests and see the results.
+
+## Link to Running Application
+http://recitation-11-team-2.eastus.cloudapp.azure.com:3000/
