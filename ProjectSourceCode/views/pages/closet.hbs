@@ -38,27 +38,29 @@
       } 
       .card:hover {     
       transform: scale(1.1); 
-      } 
-      .card-name h5 { 
-      margin-left: 5%; 
-      margin-bottom:0; 
-      white-space: nowrap; 
-      overflow: hidden; 
-      text-overflow: ellipsis; 
-      width:90%; 
-      font-size: 1rem; 
-      line-height: 1.2; 
-      } 
-      .card-price p { margin-left: 5%;
-      text-align: left; 
-      color: rgb(90, 90, 90); 
-      font-size: 0.8rem; }      
+      }
       .card-img-top { 
       width: 100%; 
       height: 350px; 
       padding-bottom: 5%; 
       object-fit:cover; 
-
+      }
+      .card-name h5 {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 90%;
+      }
+      .card-price p {
+          text-align: left;
+          color: rgb(55, 55, 55);
+      }
+      .card-description p {
+        line-height: 1.5em;
+        height: 3em;
+        overflow: hidden;
+        text-align: left;
+      }
       #closet-modal {
         display: none; /* Hidden by default */
         position: static; /* Stay in place */
@@ -140,10 +142,18 @@
                     alt="{{this.name}}"
                   />
                   <div class="card-body">
-                    <h5 class="card-title">{{this.name}}</h5>
-                    <p class="card-text">${{this.price}}</p>
-                    <p class="card-text">{{this.description}}</p>
-                    <p class="card-text">Brand: {{this.brand}}</p>
+                    <div class="card-name">
+                      <h5>{{this.name}}</h5>
+                    </div>
+                    <div class="card-price">
+                      <p>${{this.price}}</p>
+                    </div>
+                    <div class="card-description">
+                      <p>{{this.description}}</p>
+                    </div>
+                    <div class="card-text">
+                      <p>Brand: {{this.brand}}</p>
+                    </div>
                     {{!-- <button type="button" class="addToOutfit btn btn-success" data-item-id="{{this.item_id}}" data-bs-toggle="modal" data-bs-target="#closet-modal">Add to Outfit</button> --}}
                     {{!-- <button type="button" class="addToOutfit btn btn-success" onclick="passItemIdToForm({{this.item_id}})">Add to Outfit</button> --}}
                     <button type="button" class="addToOutfit btn btn-success mb-2" data-item-id="{{this.item_id}}" onclick="passItemIdToForm({{this.item_id}})">Add to Outfit</button>
