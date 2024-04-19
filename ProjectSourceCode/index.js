@@ -454,6 +454,28 @@ app.post("/closet/addYourOwn", (req, res) => {
     });
 });
 
+app.post('/closet/deleteItem', function (req, res) {
+  const item_id = Number(req.body.item_id)
+  const delete_item_to_categories = `DELETE FROM items_to_categories WHERE item_id = '${item_id}';`
+  const delete_item_to_outfit = `DELETE FROM items_to_outfits WHERE item_id = '${item_id}';`
+  const delete_item_to_users = `DELETE FROM users_to_items WHERE item_id = '${item_id}';`
+  const delete_item = `DELETE FROM items WHERE item_id = '${item_id}';`
+
+  db.task('delete-everything', task => {
+    return task.batch([task.any(delete_item_to_categories), 
+      task.any(delete_item_to_outfit), 
+      task.any(delete_item_to_users),
+      task.any(delete_item)]);
+  })
+    .then(function (data) {
+      res.redirect('/closet')
+    })
+    .catch(error => { 
+      res.status(500).send("Internal Server Error");
+    });
+
+});
+
 app.post("/addToOutfit", async (req, res) => {
 
   const existing_outfit_id = Number(req.body.existingOutfit); 
