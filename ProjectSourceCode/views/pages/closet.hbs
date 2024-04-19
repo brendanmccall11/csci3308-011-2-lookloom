@@ -63,7 +63,14 @@
       }
       #closet-modal {
         display: none; /* Hidden by default */
-        position: static; /* Stay in place */
+        position: absolute; /* Stay in place */
+      }
+
+      #message {
+        position: relative;
+        z-index: 999;
+        width: 87%;
+        margin-left: 13%;
       }
     </style>
   </head>
@@ -174,12 +181,10 @@
                     <button type="button" class="btn-close close-button" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                    {{!-- REMEMBER TO MAKE THE API ROUTE LATER --}}
                     <form method="post" action="/addToOutfit" style="margin-left:auto; margin-right:auto;">
                       <h5 class="modal-title">Add to Existing Outfit</h5>
                         <div class="form-group" style="padding-bottom: 20px">
                           <label>Select Existing Outfit</label>
-                          {{!-- USE existingOutfit IN THE API ROUTE --}}
                             <select id="existing_outfit" class="form-select" name="existingOutfit">
                               <option value="">None</option>
                               {{#each outfits}}

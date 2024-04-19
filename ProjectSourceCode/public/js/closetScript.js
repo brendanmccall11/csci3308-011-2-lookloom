@@ -45,3 +45,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// function updateRequirements() {
+//     var name = document.getElementById('name').value;
+//     if (name != null) {
+//       document.getElementById('location').required = true;
+//     } else {
+//       document.getElementById('location').required = false;
+//     }
+//   }

@@ -489,6 +489,33 @@ app.post("/addToOutfit", async (req, res) => {
 
   console.log(current_item_id);
 
+  // CASE: if user did not fill in any of the fields
+  // currently renders the closet page with message, does not redirect to closet with message
+  if (existing_outfit_id == "" && (new_outfit_name == null || new_outfit_name == undefined || new_outfit_name == ""))
+  {
+    const items = await db.query("SELECT * FROM items");
+    const outfits = await db.query("SELECT * FROM outfits");
+    res.render("pages/closet", { 
+      items,
+      message: "You must either select an existing outfit to add item to or create a new outfit.",
+      error: true
+     });
+     return;
+  }
+
+  // CASE: if user selected an existing outfit and wrote in the new outfit name field
+
+  if (existing_outfit_id != "" && new_outfit_name != null && new_outfit_name != undefined && new_outfit_name != "")
+  {
+    const items = await db.query("SELECT * FROM items");
+    res.render("pages/closet", { 
+      items,
+      message: "You must either select an existing outfit to add item to or create a new outfit. You cannot choose to do both.",
+      error: true
+     });
+     return;
+  }
+
   // CASE: user wants to create a new outfit
   if (existing_outfit_id == "" && new_outfit_name != null && new_outfit_name != undefined)
   {
