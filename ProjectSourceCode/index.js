@@ -460,6 +460,10 @@ app.post("/addToOutfit", async (req, res) => {
   const new_outfit_name = req.body.newOutfitName;
   const new_outfit_description = req.body.newOutfitDescription;
   const current_item_id = Number(req.body.itemId);
+  var current_user_id = await db.query(`SELECT user_id FROM users WHERE username = '${user.username}';`);
+  console.log(current_user_id);
+  current_user_id = current_user_id[0].user_id; // access user id from json object returned by query
+  console.log(current_user_id);
 
   console.log(current_item_id);
 
@@ -475,6 +479,24 @@ app.post("/addToOutfit", async (req, res) => {
         console.log("unsuccessful insert into outfits table");
       });
 
+      const new_outfit_id = await db.query(
+        `SELECT outfit_id FROM outfits WHERE outfit_name = '${new_outfit_name}';`
+      );
+      console.log(new_outfit_id);
+  
+      // Access the outfit_id directly from the object
+      const outfitId = new_outfit_id[0].outfit_id;
+
+      var query0 = `INSERT INTO users_to_outfits (user_id, outfit_id) VALUES ($1, $2);`;
+
+      db.any(query0, [current_user_id, outfitId])
+      .then((data) => {
+        console.log("successful insert into users_to_outfits table!!");
+      })
+      .catch((err) => {
+        console.log("unsuccessful insert into users_to_outfits table");
+      });
+
 
     // if user entered a description
     if (new_outfit_description != null && new_outfit_description != undefined)
@@ -488,13 +510,6 @@ app.post("/addToOutfit", async (req, res) => {
           console.log("unsuccessful outfit description update");
         });
     }
-
-    const new_outfit_id = await db.query(
-      `SELECT outfit_id FROM outfits WHERE outfit_name = '${new_outfit_name}';`
-    );
-
-    // Access the outfit_id directly from the object
-    const outfitId = new_outfit_id[0].outfit_id;
 
     console.log(outfitId);
 
@@ -514,7 +529,7 @@ app.post("/addToOutfit", async (req, res) => {
   // else if (existing_outfit_id != null && existing_outfit_id != undefined && (new_outfit_name == null || new_outfit_name == undefined) && (new_outfit_description == null || new_outfit_description == undefined))
   else
   {
-    var query3 = `INSERT INTO items_to_outfits (item_id, outfit_id) VALUES ($1, $2);`;
+    var query3 = `INSERT INTO items_to_outfits (item_id, outfit_id) VALUES ($1, $2)`
     db.any(query3, [current_item_id, existing_outfit_id])
       .then((data) => {
         res.redirect('/closet');
@@ -524,12 +539,6 @@ app.post("/addToOutfit", async (req, res) => {
         res.redirect('/closet');
         console.log("unsuccessful add to items_to_outfits (existing outfit)");
       });
-
-      // const testingtesting = await db.query(
-      //   `SELECT name FROM items WHERE item_id = (SELECT item_id FROM items_to_outfits WHERE outfit_id= '${existing_outfit_id}');`
-      // );
-
-      // console.log(testingtesting);
   }
 });
 
