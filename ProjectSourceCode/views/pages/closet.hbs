@@ -139,7 +139,7 @@
             <button type="button" class="col-md-4 btn btn-primary" style="width: 220px;" data-bs-toggle="modal" data-bs-target="#Modal">
               Add Your Own Item
             </button>
-            
+
             {{#each items}}
               <div class="col-md-4">
                 <div class="card">
@@ -172,6 +172,8 @@
                 </div>
               </div>
             {{/each}}
+            
+            {{!-- MODAL FOR ADDING TO OUTFIT --}}
             <div class="modal" tabindex="-1" id="closet-modal">
               <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">

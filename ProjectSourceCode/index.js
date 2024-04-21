@@ -248,10 +248,18 @@ app.get("/closet", async (req, res) => {
       `SELECT * FROM items 
       INNER JOIN users_to_items 
         ON items.item_id = users_to_items.item_id 
-      WHERE users_to_items.user_id = (SELECT user_id FROM users WHERE username = '${user.username}');`)
+      WHERE users_to_items.user_id = (SELECT user_id FROM users WHERE username = '${user.username}');`);
 
     //const items = await db.query("SELECT * FROM items"); -- Changed this so it only selects items that belong to the user (Olivia)
-    const outfits = await db.query("SELECT * FROM outfits");
+    // const outfits = await db.query("SELECT * FROM outfits"); -- changed so it only selects outfits that belong to user (Linh)
+
+    // query for selecting outfits that only belong to user
+    const outfits = await db.query(
+      `SELECT * FROM outfits 
+      INNER JOIN users_to_outfits 
+        ON outfits.outfit_id = users_to_outfits.outfit_id 
+      WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = '${user.username}');`
+    );
 
     // Render the closet page and pass items to the template
     res.render("pages/closet", { items, outfits });
@@ -276,6 +284,14 @@ app.get("/closet/tops", async (req, res) => {
       AND items_to_categories.category_id = (SELECT category_id FROM categories WHERE category_name = 'Tops');`
     );
 
+    // query for selecting outfits that only belong to user
+    const outfits = await db.query(
+      `SELECT * FROM outfits 
+      INNER JOIN users_to_outfits 
+        ON outfits.outfit_id = users_to_outfits.outfit_id 
+      WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = '${user.username}');`
+    );
+
     // -- Changed to only select tops belonging to user
 
     // const items = await db.query(
@@ -283,7 +299,7 @@ app.get("/closet/tops", async (req, res) => {
     // );
 
     // Render the page for tops and pass the items
-    res.render("pages/closet", { items });
+    res.render("pages/closet", { items, outfits });
   } catch (error) {
     // Handle errors
     console.error("Error fetching data:", error);
@@ -306,6 +322,13 @@ app.get("/closet/bottoms", async (req, res) => {
       AND items_to_categories.category_id = (SELECT category_id FROM categories WHERE category_name = 'Bottoms');`
     );
 
+    const outfits = await db.query(
+      `SELECT * FROM outfits 
+      INNER JOIN users_to_outfits 
+        ON outfits.outfit_id = users_to_outfits.outfit_id 
+      WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = '${user.username}');`
+    );
+
     // -- Changed to only select bottoms belonging to user
 
     // const items = await db.query(
@@ -313,7 +336,7 @@ app.get("/closet/bottoms", async (req, res) => {
     // );
 
     // Render the page for bottoms and pass the items
-    res.render("pages/closet", { items });
+    res.render("pages/closet", { items, outfits });
   } catch (error) {
     // Handle errors
     console.error("Error fetching data:", error);
@@ -336,6 +359,13 @@ app.get("/closet/dresses", async (req, res) => {
       AND items_to_categories.category_id = (SELECT category_id FROM categories WHERE category_name = 'Dresses');`
     );
 
+    const outfits = await db.query(
+      `SELECT * FROM outfits 
+      INNER JOIN users_to_outfits 
+        ON outfits.outfit_id = users_to_outfits.outfit_id 
+      WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = '${user.username}');`
+    );
+
     // -- Changed to only select dresses belonging to user
 
     // const items = await db.query(
@@ -343,7 +373,7 @@ app.get("/closet/dresses", async (req, res) => {
     // );
 
     // Render the page for Dresses and pass the items
-    res.render("pages/closet", { items });
+    res.render("pages/closet", { items, outfits });
   } catch (error) {
     // Handle errors
     console.error("Error fetching data:", error);
@@ -366,6 +396,13 @@ app.get("/closet/shoes", async (req, res) => {
       AND items_to_categories.category_id = (SELECT category_id FROM categories WHERE category_name = 'Shoes');`
     );
 
+    const outfits = await db.query(
+      `SELECT * FROM outfits 
+      INNER JOIN users_to_outfits 
+        ON outfits.outfit_id = users_to_outfits.outfit_id 
+      WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = '${user.username}');`
+    );
+
     // -- Changed to only select shoes belonging to user
 
     // const items = await db.query(
@@ -373,7 +410,7 @@ app.get("/closet/shoes", async (req, res) => {
     // );
 
     // Render the page for bottoms and pass the items
-    res.render("pages/closet", { items });
+    res.render("pages/closet", { items, outfits });
   } catch (error) {
     // Handle errors
     console.error("Error fetching data:", error);
@@ -396,6 +433,13 @@ app.get("/closet/Accessories", async (req, res) => {
       AND items_to_categories.category_id = (SELECT category_id FROM categories WHERE category_name = 'Accessories');`
     );
 
+    const outfits = await db.query(
+      `SELECT * FROM outfits 
+      INNER JOIN users_to_outfits 
+        ON outfits.outfit_id = users_to_outfits.outfit_id 
+      WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = '${user.username}');`
+    );
+
     // -- Changed to only select accessories belonging to user
 
     // const items = await db.query(
@@ -403,7 +447,7 @@ app.get("/closet/Accessories", async (req, res) => {
     // );
 
     // Render the page for bottoms and pass the items
-    res.render("pages/closet", { items });
+    res.render("pages/closet", { items, outfits });
   } catch (error) {
     // Handle errors
     console.error("Error fetching data:", error);
@@ -489,14 +533,29 @@ app.post("/addToOutfit", async (req, res) => {
 
   console.log(current_item_id);
 
+  // query for items that belong to user
+  const items = await db.query(
+    `SELECT * FROM items 
+    INNER JOIN users_to_items 
+      ON items.item_id = users_to_items.item_id 
+    WHERE users_to_items.user_id = (SELECT user_id FROM users WHERE username = '${user.username}');`);
+
+  // query for outfits that belong to user
+  const outfits = await db.query(
+    `SELECT * FROM outfits 
+    INNER JOIN users_to_outfits 
+      ON outfits.outfit_id = users_to_outfits.outfit_id 
+    WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = '${user.username}');`
+  );
+
   // CASE: if user did not fill in any of the fields
   // currently renders the closet page with message, does not redirect to closet with message
   if (existing_outfit_id == "" && (new_outfit_name == null || new_outfit_name == undefined || new_outfit_name == ""))
   {
-    const items = await db.query("SELECT * FROM items");
-    const outfits = await db.query("SELECT * FROM outfits");
+    
     res.render("pages/closet", { 
       items,
+      outfits,
       message: "You must either select an existing outfit to add item to or create a new outfit.",
       error: true
      });
@@ -510,6 +569,7 @@ app.post("/addToOutfit", async (req, res) => {
     const items = await db.query("SELECT * FROM items");
     res.render("pages/closet", { 
       items,
+      outfits,
       message: "You must either select an existing outfit to add item to or create a new outfit. You cannot choose to do both.",
       error: true
      });
@@ -575,7 +635,6 @@ app.post("/addToOutfit", async (req, res) => {
   }
 
   // NEED TO UPDATE CASES LATER, THERE ARE MANY EDGE CASES
-  // else if (existing_outfit_id != null && existing_outfit_id != undefined && (new_outfit_name == null || new_outfit_name == undefined) && (new_outfit_description == null || new_outfit_description == undefined))
   else
   {
     var query3 = `INSERT INTO items_to_outfits (item_id, outfit_id) VALUES ($1, $2)`
