@@ -85,20 +85,6 @@ describe('Testing Redirect', () => {
   });
 });
 
-describe('Testing Render', () => {
-    // Sample test case given to test /test endpoint.
-    it('test "/accountDetails" route should render with an html response', done => {
-      chai
-        .request(server)
-        .get('/accountDetails') // for reference, see lab 8's login route (/login) which renders home.hbs
-        .end((err, res) => {
-          expect(res).to.have.status(200); // Expecting a success status code
-          res.should.be.html; // Expecting a HTML response
-          done();
-        });
-    });
-  });
-
   // create a cookies variable
 var cookies;
 
@@ -137,5 +123,54 @@ describe('Testing Login', () => {
       });
   });
 });
+
+describe('Testing Render', () => {
+  // Sample test case given to test /test endpoint.
+  it('test "/accountDetails" route should render with an html response', done => {
+    chai
+      .request(server)
+      .get('/accountDetails') // for reference, see lab 8's login route (/login) which renders home.hbs
+      // .set('cookie', cookies)
+      .end((err, res) => {
+        expect(res).to.have.status(200); // Expecting a success status code
+        res.should.be.html; // Expecting a HTML response
+        done();
+      });
+  });
+});
+
+// Testing that can't access pages unless logged in.
+describe("Testing Closet", () => {
+  it("/closet. Testing that closet redirects when not logged in", (done) => {
+    chai
+      .request(server)
+      .get("/closet")
+      .end((err, res) => {
+        expect(res).to.have.status(200); // Expecting a success status code
+        res.should.be.html; // Expecting a HTML response
+        res.should.redirectTo(/login$/);
+        done();
+      });
+  });
+  
+});
+
+describe("Testing gallery", () => {
+  it("/gallery. Testing that gallery redirects when not logged in", (done) => {
+    chai
+      .request(server)
+      .get("/gallery")
+      .end((err, res) => {
+        expect(res).to.have.status(200); // Expecting a success status code
+        res.should.be.html; // Expecting a HTML response
+        res.should.redirectTo(/login$/);
+        done();
+      });
+  });
+  
+});
+
+
+
 
 // ********************************************************************************

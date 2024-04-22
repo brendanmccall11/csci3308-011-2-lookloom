@@ -463,7 +463,7 @@ app.post("/closet/addYourOwn", (req, res) => {
   const image_url = req.body.image_url;
   const brand = req.body.brand;
   const category = req.body.categories;
-  console.log(category);
+  // console.log(category);
 
   var query = "INSERT INTO items (name, price, image_url, link, description, brand) VALUES ($1, $2, $3, $4, $5, $6);";
   var query1 = "INSERT INTO items_to_categories (item_id, category_id) VALUES ((SELECT item_id FROM items WHERE name = $1), (SELECT category_id FROM categories WHERE category_name = $2))";
@@ -481,7 +481,11 @@ app.post("/closet/addYourOwn", (req, res) => {
 
       try {
         // Fetch all items from the database
-        const items = await db.query("SELECT * FROM items");
+        const items = await db.query(
+          `SELECT * FROM items 
+          INNER JOIN users_to_items 
+            ON items.item_id = users_to_items.item_id 
+          WHERE users_to_items.user_id = (SELECT user_id FROM users WHERE username = '${user.username}');`);
     
         // Render the closet page and pass items to the template
         res.render("pages/closet", { 
