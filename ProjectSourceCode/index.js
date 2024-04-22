@@ -231,7 +231,6 @@ app.get("/gallery", async (req, res) => {
           cardName: amazonItem.productDescription,
           cardPrice: amazonItem.price,
           cardDescription: amazonItem.productRating + ', ' + amazonItem.salesVolume,
-          cardBrand: 'Amazon'
         }));
       } catch (error) {
         console.error(error);
