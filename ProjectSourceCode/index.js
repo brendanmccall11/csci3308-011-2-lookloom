@@ -689,40 +689,37 @@ app.get("/accountDetails", (req, res) => {
   res.render("pages/accountDetails", { user: req.session.user });
 });
 
-// Route to handle updating account details
-app.post("/updateAccount", async (req, res) => {
-  const { username, password, firstName, lastName, closetPreference } = req.body;
+// Route to handle changing password
+app.post("/changePassword", async (req, res) => {
+  const { currentPassword, newPassword, confirmPassword } = req.body;
 
-  // Update user information in the database
+  // Validate if current password matches with the one stored in the database
+  const isValidPassword = await validatePassword(req.session.user.username, currentPassword); // Implement this function
+  
+  if (!isValidPassword) {
+    return res.status(400).send("Current password is incorrect");
+  }
+
+  // Check if new password and confirm password match
+  if (newPassword !== confirmPassword) {
+    return res.status(400).send("New password and confirm password do not match");
+  }
+
   try {
-    // Update username, first name, last name, and closet preference
+    // Hash the new password
+    const hash = await bcrypt.hash(newPassword, 10);
+    
+    // Update the password in the database
     await db.none(
-      "UPDATE users SET username = $1, first_name = $2, last_name = $3, closet_preference = $4 WHERE username = $5",
-      [username, firstName, lastName, closetPreference, req.session.user.username]
+      "UPDATE users SET password = $1 WHERE username = $2",
+      [hash, req.session.user.username]
     );
 
-    // If password is being updated, hash the new password and update it
-    if (password) {
-      const hash = await bcrypt.hash(password, 10);
-      await db.none(
-        "UPDATE users SET password = $1 WHERE username = $2",
-        [hash, req.session.user.username]
-      );
-    }
-
-    // Update session with new user information
-    req.session.user = {
-      ...req.session.user,
-      username,
-      firstName,
-      lastName,
-      closetPreference
-    };
-
+    // Password updated successfully
     res.redirect("/accountDetails");
   } catch (error) {
-    console.error("Error updating account:", error);
-    res.status(500).send("Error updating account");
+    console.error("Error updating password:", error);
+    res.status(500).send("Error updating password");
   }
 });
 
