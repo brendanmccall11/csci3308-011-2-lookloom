@@ -18,7 +18,7 @@
     .card {
         background-color: #f7f7f7;
         border: none;
-        height: 600px;
+        height: 550px;
         width: 220px;
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 1px 3px 0 rgba(0, 0, 0, 0.19);
         transition: transform 0.3s ease-in-out;
@@ -27,14 +27,14 @@
         justify-content: space-between;
     }
     .card:hover {
-        transform: scale(1.1);
+        transform: scale(1.05);
     }
     .card-link {
         text-decoration: none;
     }
     .card-img-top {
         width: 100%;
-        height: 350px;
+        height: 340px;
         padding-bottom: 5%;
         object-fit: cover;
     }
@@ -63,16 +63,20 @@
     <div class="fixed-div hover">
         {{#each amazonItems}}
         <div class="card">
-            <a href="{{this.url}}" class="card-link">
-                <img id="image" src="{{this.image}}" alt="Card Image" class="card-img-top">
+            <a href="{{this.cardUrl}}" class="card-link">
+                <img id="image" src="{{this.cardImage}}" alt="Card Image" class="card-img-top">
             </a>
-            <div class="card-info">
+            <div class="card-body">
                 <div class="card-name">
-                    <h6>{{this.name}}</h6>
+                    <h5>{{this.cardName}}</h5>
                 </div>
                 <div class="card-price">
-                    <p>${{this.price}}</p>
+                    <p>{{this.cardPrice}}</p>
                 </div>
+                <div class="card-description">
+                    <p>{{this.cardDescription}}</p>
+                </div>
+                <button type="button" class="btn btn-success">Add to Closet</button>
             </div>
         </div>
         {{/each}}
@@ -90,9 +94,6 @@
                 <div class="card-description">
                     <p>This is a dress. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                 </div>
-                <div class="card-text">
-                    <p>Brand: Amazon Essentials</p>
-                </div>
                 <button type="button" class="btn btn-success">Add to Closet</button>
             </div>
         </div>
@@ -109,9 +110,6 @@
                 </div>
                 <div class="card-description">
                     <p>This is a suit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                </div>
-                <div class="card-text">
-                    <p>Brand: Amazon Essentials</p>
                 </div>
                 <button type="button" class="btn btn-success">Add to Closet</button>
             </div>
