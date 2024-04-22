@@ -1,7 +1,7 @@
 -- Insert test user
-INSERT INTO users (user_id, username, password, first_name, last_name) VALUES
-    (1, 'test', '$2b$10$1pjbz9V8tUTD/lsithLuH.bTh4Z19vsBtpN1TuAJeO.ibudeN6Sea', 'John', 'Doe'),
-    (2, 'oliviaa', '$2b$10$4wi7dzzsiJi8ACLeyoAO1e/9H0E8Xjbmrb2bDLqSjILLUVWgdSvnS', 'Olivia', 'Zhu');
+INSERT INTO users (username, password, first_name, last_name) VALUES
+    ('test', '$2b$10$1pjbz9V8tUTD/lsithLuH.bTh4Z19vsBtpN1TuAJeO.ibudeN6Sea', 'John', 'Doe'),
+    ('oliviaa', '$2b$10$4wi7dzzsiJi8ACLeyoAO1e/9H0E8Xjbmrb2bDLqSjILLUVWgdSvnS', 'Olivia', 'Zhu');
 
 -- Insert sample data into categories table
 INSERT INTO categories (category_name) VALUES
