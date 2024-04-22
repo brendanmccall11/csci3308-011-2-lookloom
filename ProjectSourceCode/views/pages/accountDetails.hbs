@@ -87,22 +87,6 @@
         .profile-section button[type="button"]:hover {
             background-color: #0056b3;
         }
-        .friends-section {
-            text-align: left;
-        }
-        .friend-circle {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: #007bff;
-            color: #fff;
-            font-size: 24px;
-            line-height: 50px;
-            margin: 0 10px;
-            text-align: center;
-
-        }
     </style>
 </head>
 <body>
@@ -114,19 +98,8 @@
             <main>
                 <section class="form-section">
                     <h2>User Information</h2>
-                    <p>Username: <span id="username"></span></p>
-                    <p>Email: <span id="email"></span></p>
-                </section>
-                <section class="profile-section">
-                    <img id="profilePicture" src="" alt="Profile Picture">
-                    <button id="updateProfilePictureBtn" type="button">Update Profile Picture</button>
-                </section>
-                <section class="friends-section">
-                    <h2>Friends</h2>
-                    <div id="friendsList"></div>
-                    <div class="friend-circle">JD</div>
-                    <div class="friend-circle">AB</div>
-                    <div class="friend-circle">EF</div>
+                    <p>Username: {{user.username}}<span id="username"></span></p>
+                    <p>Name: {{user.first_name}} {{user.last_name}}<span id="username"></span></p>
                 </section>
                 <section class="form-section">
                     <h2>Closet Preference</h2>
@@ -136,7 +109,6 @@
                             <option value="public">Public</option>
                             <option value="private">Private</option>
                         </select><br>
-                        <button type="submit">Save Preference</button>
                     </form>
                 </section>
                 <section class="form-section">
@@ -154,43 +126,5 @@
             </main>
         </div>
     </div>
-
-<script>
-    window.addEventListener('DOMContentLoaded', async () => {
-        try {
-            // Fetch user information
-            const userInfoResponse = await fetch('/getUserInfo');
-            const userData = await userInfoResponse.json();
-
-            // Update user information in the DOM
-            document.getElementById('username').innerText = userData.username;
-            document.getElementById('email').innerText = userData.email;
-
-            // Update profile picture
-            document.getElementById('profilePicture').src = userData.profilePicture;
-
-            // Fetch friends list
-            const friendsResponse = await fetch('/getFriendsList');
-            const friendsData = await friendsResponse.json();
-
-            // Update friends list in the DOM
-            const friendsList = document.getElementById('friendsList');
-            if (friendsData.length === 0) {
-                const noFriendsMessage = document.createElement('p');
-                noFriendsMessage.textContent = 'No friends added.';
-                friendsList.appendChild(noFriendsMessage);
-            } else {
-                friendsData.forEach(friend => {
-                    const friendElement = document.createElement('div');
-                    friendElement.classList.add('friend-circle');
-                    friendElement.textContent = friend.name;
-                    friendsList.appendChild(friendElement);
-                });
-            }
-        } catch (error) {
-            console.error('Error fetching user information:', error);
-        }
-    });
-</script>
 </body>
 </html>
