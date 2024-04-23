@@ -749,12 +749,31 @@ app.get("/outfits", async (req, res) => {
   }
 });
 
-app.get("/outfit", (req, res) => {
-  res.render("pages/outfit");
-});
-
-app.get("/outfit", (req, res) => {
-  res.render("pages/outfit");
+app.get("/outfit", async (req, res) => {
+  const id = req.query.id;
+  try {
+    const outfit = await db.query(`SELECT * FROM outfits WHERE outfit_id = ${id} LIMIT 1`);
+    const items = await db.query(`SELECT i.*
+    FROM items i
+    JOIN items_to_outfits io ON i.item_id = io.item_id
+    WHERE io.outfit_id = ${id}
+    `);
+    const owner = await db.query(`SELECT u.user_id, u.username, u.first_name, u.last_name
+    FROM users u
+    JOIN users_to_outfits uo ON u.user_id = uo.user_id
+    WHERE uo.outfit_id = ${id};`)
+    // console.log(outfit, items, owner)
+    res.render("pages/outfit", {
+      outfit: outfit[0],
+      items: items,
+      owner: owner[0]
+    });
+  }
+  catch (error) {
+    console.error("Error fetching data:", error);
+    res.status(500).send("Internal Server Error");
+  }
+  
 });
 
 // Route to render the account details page
