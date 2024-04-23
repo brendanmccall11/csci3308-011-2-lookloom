@@ -111,38 +111,28 @@
     <div>
       {{> message}}
     </div>
-    <div class="fixed-div">
-        <!-- Display items from the amazonItems array -->
+    <div class="fixed-div hover">
         {{#each amazonItems}}
         <div class="card">
-            <a href="{{this.link}}" class="card-link">
-                <img src="{{this.imageUrl}}" alt="Card Image" class="card-img-top">
+            <a href="{{this.cardUrl}}" class="card-link">
+                <img id="image" src="{{this.cardImage}}" alt="Card Image" class="card-img-top">
             </a>
             <div class="card-body">
                 <div class="card-name">
-                    <h5>{{this.name}}</h5>
+                    <h5>{{this.cardName}}</h5>
                 </div>
                 <div class="card-price">
-                    <p>${{this.price}}</p>
+                    <p>{{this.cardPrice}}</p>
                 </div>
                 <div class="card-description">
-                    <p>{{this.description}}</p>
+                    <p>{{this.cardDescription}}</p>
                 </div>
-                <button type="button" class="addToCloset btn btn-success" 
-                        data-name="{{this.name}}" 
-                        data-price="{{this.price}}" 
-                        data-image="{{this.imageUrl}}" 
-                        data-description="{{this.description}}" 
-                        data-brand="{{this.brand}}" 
-                        data-categoryid="{{this.categoryid}}">
-                    Add to Closet
-                </button>
+                <button type="button" class="btn btn-success">Add to Closet</button>
             </div>
         </div>
         {{/each}}
-    </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             addCardsToPage();
         });
     </script>

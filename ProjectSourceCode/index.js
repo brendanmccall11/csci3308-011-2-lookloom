@@ -55,6 +55,8 @@ app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "views"));
 app.use(bodyParser.json()); // specify the usage of JSON for parsing request body.
 app.use(express.static("public"));
+app.use(express.json()); // Ensure this middleware is setup to parse JSON.
+
 
 // initialize session variables
 app.use(
@@ -125,25 +127,32 @@ app.post("/register", async (req, res) => {
 
 app.post("/login", (req, res) => {
   const username = req.body.username;
-  console.log(username);
   var query = "SELECT * FROM users WHERE username = $1;";
-  console.log(query);
 
   db.any(query, [username])
     .then(async (data) => {
-      console.log(data);
-      user.username = username;
-      user.password = data[0].password;
-      user.first_name = data[0].first_name;
-      user.last_name = data[0].last_name;
-      // check if password from request matches with password in DB
+      if (data.length === 0) {  // Check if the user data was actually found
+        res.status(400).render("pages/register", {
+          message: "Account not found. Please register.",
+          error: true,
+        });
+        return;
+      }
+
+      const user = data[0]; // Assuming the first record is the user
       const match = await bcrypt.compare(req.body.password, user.password);
 
       if (match) {
-        //save user details in session like in lab 7
-        req.session.user = user;
-        req.session.save();
-        res.redirect("/gallery");
+        // Save user details in session
+        req.session.user = {
+          id: user.user_id,  // Ensure this is the correct field name for your user ID in the database
+          username: user.username,
+          firstName: user.first_name,
+          lastName: user.last_name
+        };
+        req.session.save(() => {
+          res.redirect("/gallery");
+        });
       } else {
         res.status(400).render("pages/login", {
           message: "Incorrect username or password.",
@@ -152,9 +161,9 @@ app.post("/login", (req, res) => {
       }
     })
     .catch((err) => {
-      console.log(err);
-      res.status(400).render("pages/register", {
-        message: "Account not found. Please register.",
+      console.error("Error during login process:", err);
+      res.status(500).render("pages/login", {
+        message: "Internal Server Error. Please try again later.",
         error: true,
       });
     });
@@ -250,102 +259,109 @@ app.get("/gallery", async (req, res) => {
 
 app.get("/closet", async (req, res) => {
   try {
-    // Fetch all items from the database
+    // Check if the user is authenticated
+    if (!req.session.user || !req.session.user.username) {
+      res.status(403).send("Unauthorized access.");
+      return;
+    }
+
+    // Query to select items that belong to the user
     const items = await db.query(
       `SELECT * FROM items 
       INNER JOIN users_to_items 
         ON items.item_id = users_to_items.item_id 
-      WHERE users_to_items.user_id = (SELECT user_id FROM users WHERE username = '${user.username}');`);
+      WHERE users_to_items.user_id = $1`,
+      [req.session.user.id]  // Changed this to use a parameterized query to avoid SQL injection (Olivia)
+    );
 
-    //const items = await db.query("SELECT * FROM items"); -- Changed this so it only selects items that belong to the user (Olivia)
-    // const outfits = await db.query("SELECT * FROM outfits"); -- changed so it only selects outfits that belong to user (Linh)
-
-    // query for selecting outfits that only belong to user
+    // const items = await db.query("SELECT * FROM items"); -- Changed this so it only selects items that belong to the user (Olivia)
+    
+    // Query for selecting outfits that only belong to the user
     const outfits = await db.query(
       `SELECT * FROM outfits 
       INNER JOIN users_to_outfits 
         ON outfits.outfit_id = users_to_outfits.outfit_id 
-      WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = '${user.username}');`
+      WHERE users_to_outfits.user_id = $1`,
+      [req.session.user.id]  // Changed so it only selects outfits that belong to the user (Linh)
     );
 
-    // Render the closet page and pass items to the template
+    // const outfits = await db.query("SELECT * FROM outfits"); -- Changed so it only selects outfits that belong to user (Linh)
+    
+    // Combined and secured queries to enhance functionality and security (Thanh)
+
+    // Render the closet page and pass items and outfits to the template
     res.render("pages/closet", { items, outfits });
   } catch (error) {
-    // Handle errors
     console.error("Error fetching data:", error);
     res.status(500).send("Internal Server Error");
   }
 });
 
-// Route for showing tops
+
+
+// Route for showing Tops
 app.get("/closet/tops", async (req, res) => {
+  if (!req.session.user || !req.session.user.username) {
+    return res.status(401).send("User not authenticated");
+  }
+  const username = req.session.user.username;
   try {
-    // Fetch items belonging to the "Tops" category
+    const categoryResult = await db.oneOrNone(
+      "SELECT category_id FROM categories WHERE category_name = $1", ['Tops']
+    );
+    if (!categoryResult) {
+      return res.status(404).send("Category not found");
+    }
     const items = await db.query(
-      `SELECT * FROM items 
-      INNER JOIN users_to_items 
-        ON items.item_id = users_to_items.item_id 
-      INNER JOIN items_to_categories
-        ON items.item_id = items_to_categories.item_id
-      WHERE users_to_items.user_id = (SELECT user_id FROM users WHERE username = '${user.username}')
-      AND items_to_categories.category_id = (SELECT category_id FROM categories WHERE category_name = 'Tops');`
+      `SELECT items.* FROM items 
+      INNER JOIN users_to_items ON items.item_id = users_to_items.item_id 
+      INNER JOIN items_to_categories ON items.item_id = items_to_categories.item_id
+      WHERE users_to_items.user_id = (SELECT user_id FROM users WHERE username = $1)
+      AND items_to_categories.category_id = $2`,
+      [username, categoryResult.category_id]
     );
-
-    // query for selecting outfits that only belong to user
     const outfits = await db.query(
-      `SELECT * FROM outfits 
-      INNER JOIN users_to_outfits 
-        ON outfits.outfit_id = users_to_outfits.outfit_id 
-      WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = '${user.username}');`
+      `SELECT outfits.* FROM outfits 
+      INNER JOIN users_to_outfits ON outfits.outfit_id = users_to_outfits.outfit_id 
+      WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = $1)`,
+      [username]
     );
-
-    // -- Changed to only select tops belonging to user
-
-    // const items = await db.query(
-    //   "SELECT * FROM items WHERE item_id IN (SELECT item_id FROM items_to_categories WHERE category_id = (SELECT category_id FROM categories WHERE category_name = 'Tops'))"
-    // );
-
-    // Render the page for tops and pass the items
     res.render("pages/closet", { items, outfits });
   } catch (error) {
-    // Handle errors
     console.error("Error fetching data:", error);
     res.status(500).send("Internal Server Error");
   }
 });
 
-// Route for showing bottoms
+// Route for showing Bottoms
 app.get("/closet/bottoms", async (req, res) => {
+  if (!req.session.user || !req.session.user.username) {
+    return res.status(401).send("User not authenticated");
+  }
+  const username = req.session.user.username;
   try {
-    // Fetch items belonging to the "Bottoms" category
-
+    const categoryResult = await db.oneOrNone(
+      "SELECT category_id FROM categories WHERE category_name = $1", ['Bottoms']
+    );
+    if (!categoryResult) {
+      return res.status(404).send("Category not found");
+    }
     const items = await db.query(
-      `SELECT * FROM items 
-      INNER JOIN users_to_items 
-        ON items.item_id = users_to_items.item_id 
-      INNER JOIN items_to_categories
-        ON items.item_id = items_to_categories.item_id
-      WHERE users_to_items.user_id = (SELECT user_id FROM users WHERE username = '${user.username}')
-      AND items_to_categories.category_id = (SELECT category_id FROM categories WHERE category_name = 'Bottoms');`
+      `SELECT items.* FROM items 
+      INNER JOIN users_to_items ON items.item_id = users_to_items.item_id 
+      INNER JOIN items_to_categories ON items.item_id = items_to_categories.item_id
+      WHERE users_to_items.user_id = (SELECT user_id FROM users WHERE username = $1)
+      AND items_to_categories.category_id = $2`,
+      [username, categoryResult.category_id]
     );
-
     const outfits = await db.query(
-      `SELECT * FROM outfits 
-      INNER JOIN users_to_outfits 
-        ON outfits.outfit_id = users_to_outfits.outfit_id 
-      WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = '${user.username}');`
+      `SELECT outfits.* FROM outfits 
+      INNER JOIN users_to_outfits ON outfits.outfit_id = users_to_outfits.outfit_id 
+      WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = $1)`,
+      [username]
     );
-
-    // -- Changed to only select bottoms belonging to user
-
-    // const items = await db.query(
-    //   "SELECT * FROM items WHERE item_id IN (SELECT item_id FROM items_to_categories WHERE category_id = (SELECT category_id FROM categories WHERE category_name = 'Bottoms'))"
-    // );
-
-    // Render the page for bottoms and pass the items
     res.render("pages/closet", { items, outfits });
   } catch (error) {
-    // Handle errors
     console.error("Error fetching data:", error);
     res.status(500).send("Internal Server Error");
   }
@@ -353,110 +369,117 @@ app.get("/closet/bottoms", async (req, res) => {
 
 // Route for showing Dresses
 app.get("/closet/dresses", async (req, res) => {
-  try {
-    // Fetch items belonging to the "Dresses" category
+  // Ensure the user is logged in
+  if (!req.session.user || !req.session.user.username) {
+    return res.status(401).json({ message: "User not authenticated" });
+  }
 
+  try {
+    // Use the username from the session for safety and consistency
+    const username = req.session.user.username;
+
+    // Get the category_id for Dresses
+    const categoryResult = await db.oneOrNone(
+      "SELECT category_id FROM categories WHERE category_name = $1", ['Dresses']
+    );
+
+    if (!categoryResult) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+
+    // Fetch items belonging to the "Dresses" category for the logged-in user
     const items = await db.query(
-      `SELECT * FROM items 
+      `SELECT items.* FROM items 
       INNER JOIN users_to_items 
         ON items.item_id = users_to_items.item_id 
       INNER JOIN items_to_categories
         ON items.item_id = items_to_categories.item_id
-      WHERE users_to_items.user_id = (SELECT user_id FROM users WHERE username = '${user.username}')
-      AND items_to_categories.category_id = (SELECT category_id FROM categories WHERE category_name = 'Dresses');`
+      WHERE users_to_items.user_id = (SELECT user_id FROM users WHERE username = $1)
+      AND items_to_categories.category_id = $2`, 
+      [username, categoryResult.category_id]
     );
 
+    // Fetch outfits for the logged-in user
     const outfits = await db.query(
-      `SELECT * FROM outfits 
+      `SELECT outfits.* FROM outfits 
       INNER JOIN users_to_outfits 
         ON outfits.outfit_id = users_to_outfits.outfit_id 
-      WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = '${user.username}');`
+      WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = $1)`, 
+      [username]
     );
 
-    // -- Changed to only select dresses belonging to user
-
-    // const items = await db.query(
-    //   "SELECT * FROM items WHERE item_id IN (SELECT item_id FROM items_to_categories WHERE category_id = (SELECT category_id FROM categories WHERE category_name = 'Dresses'))"
-    // );
-
-    // Render the page for Dresses and pass the items
+    // Render the page for Dresses and pass the items and outfits
     res.render("pages/closet", { items, outfits });
   } catch (error) {
-    // Handle errors
     console.error("Error fetching data:", error);
     res.status(500).send("Internal Server Error");
   }
 });
 
-// Route for showing bottoms
+
+// Route for showing Shoes
 app.get("/closet/shoes", async (req, res) => {
+  if (!req.session.user || !req.session.user.username) {
+    return res.status(401).send("User not authenticated");
+  }
+  const username = req.session.user.username;
   try {
-    // Fetch items belonging to the "Shoes" category
-
+    const categoryResult = await db.oneOrNone(
+      "SELECT category_id FROM categories WHERE category_name = $1", ['Shoes']
+    );
+    if (!categoryResult) {
+      return res.status(404).send("Category not found");
+    }
     const items = await db.query(
-      `SELECT * FROM items 
-      INNER JOIN users_to_items 
-        ON items.item_id = users_to_items.item_id 
-      INNER JOIN items_to_categories
-        ON items.item_id = items_to_categories.item_id
-      WHERE users_to_items.user_id = (SELECT user_id FROM users WHERE username = '${user.username}')
-      AND items_to_categories.category_id = (SELECT category_id FROM categories WHERE category_name = 'Shoes');`
+      `SELECT items.* FROM items 
+      INNER JOIN users_to_items ON items.item_id = users_to_items.item_id 
+      INNER JOIN items_to_categories ON items.item_id = items_to_categories.item_id
+      WHERE users_to_items.user_id = (SELECT user_id FROM users WHERE username = $1)
+      AND items_to_categories.category_id = $2`,
+      [username, categoryResult.category_id]
     );
-
     const outfits = await db.query(
-      `SELECT * FROM outfits 
-      INNER JOIN users_to_outfits 
-        ON outfits.outfit_id = users_to_outfits.outfit_id 
-      WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = '${user.username}');`
+      `SELECT outfits.* FROM outfits 
+      INNER JOIN users_to_outfits ON outfits.outfit_id = users_to_outfits.outfit_id 
+      WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = $1)`,
+      [username]
     );
-
-    // -- Changed to only select shoes belonging to user
-
-    // const items = await db.query(
-    //   "SELECT * FROM items WHERE item_id IN (SELECT item_id FROM items_to_categories WHERE category_id = (SELECT category_id FROM categories WHERE category_name = 'Shoes'))"
-    // );
-
-    // Render the page for bottoms and pass the items
     res.render("pages/closet", { items, outfits });
   } catch (error) {
-    // Handle errors
     console.error("Error fetching data:", error);
     res.status(500).send("Internal Server Error");
   }
 });
 
-// Route for showing bottoms
-app.get("/closet/Accessories", async (req, res) => {
+// Route for showing Accessories
+app.get("/closet/accessories", async (req, res) => {
+  if (!req.session.user || !req.session.user.username) {
+    return res.status(401).send("User not authenticated");
+  }
+  const username = req.session.user.username;
   try {
-    // Fetch items belonging to the "Accessories" category
-
+    const categoryResult = await db.oneOrNone(
+      "SELECT category_id FROM categories WHERE category_name = $1", ['Accessories']
+    );
+    if (!categoryResult) {
+      return res.status(404).send("Category not found");
+    }
     const items = await db.query(
-      `SELECT * FROM items 
-      INNER JOIN users_to_items 
-        ON items.item_id = users_to_items.item_id 
-      INNER JOIN items_to_categories
-        ON items.item_id = items_to_categories.item_id
-      WHERE users_to_items.user_id = (SELECT user_id FROM users WHERE username = '${user.username}')
-      AND items_to_categories.category_id = (SELECT category_id FROM categories WHERE category_name = 'Accessories');`
+      `SELECT items.* FROM items 
+      INNER JOIN users_to_items ON items.item_id = users_to_items.item_id 
+      INNER JOIN items_to_categories ON items.item_id = items_to_categories.item_id
+      WHERE users_to_items.user_id = (SELECT user_id FROM users WHERE username = $1)
+      AND items_to_categories.category_id = $2`,
+      [username, categoryResult.category_id]
     );
-
     const outfits = await db.query(
-      `SELECT * FROM outfits 
-      INNER JOIN users_to_outfits 
-        ON outfits.outfit_id = users_to_outfits.outfit_id 
-      WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = '${user.username}');`
+      `SELECT outfits.* FROM outfits 
+      INNER JOIN users_to_outfits ON outfits.outfit_id = users_to_outfits.outfit_id 
+      WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = $1)`,
+      [username]
     );
-
-    // -- Changed to only select accessories belonging to user
-
-    // const items = await db.query(
-    //   "SELECT * FROM items WHERE item_id IN (SELECT item_id FROM items_to_categories WHERE category_id = (SELECT category_id FROM categories WHERE category_name = 'Accessories'))"
-    // );
-
-    // Render the page for bottoms and pass the items
     res.render("pages/closet", { items, outfits });
   } catch (error) {
-    // Handle errors
     console.error("Error fetching data:", error);
     res.status(500).send("Internal Server Error");
   }
@@ -654,6 +677,56 @@ app.post("/addToOutfit", async (req, res) => {
         res.redirect('/closet');
         console.log("unsuccessful add to items_to_outfits (existing outfit)");
       });
+  }
+});
+
+app.post("/addtocloset", async (req, res) => {
+  // Check if the user is logged in and has a valid ID in the session
+  if (!req.session.user || !req.session.user.id) {
+    return res.status(400).json({ message: "User ID is missing in session." });
+  }
+
+  // Extract item details from the request body
+  const { name, price, image, description, brand, categoryid } = req.body;
+  const userId = req.session.user.id;
+
+  try {
+    // Perform transaction
+    const result = await db.tx(async t => {
+      // Check if the item already exists in the user's closet
+      const itemInCloset = await t.oneOrNone(
+        "SELECT item_id FROM users_to_items WHERE user_id = $1 AND item_id IN (SELECT item_id FROM items WHERE name = $2 AND brand = $3)",
+        [userId, name, brand]
+      );
+
+      if (itemInCloset) {
+        return { alreadyInCloset: true };
+      }
+
+      // Insert item if it doesn't exist
+      const insertItemQuery = "INSERT INTO items (name, price, image_url, description, brand) VALUES ($1, $2, $3, $4, $5) RETURNING item_id";
+      const newItem = await t.one(insertItemQuery, [name, parseFloat(price), image, description, brand]);
+
+      // Link item to category
+      const linkCategoryQuery = "INSERT INTO items_to_categories (item_id, category_id) VALUES ($1, $2)";
+      await t.none(linkCategoryQuery, [newItem.item_id, categoryid]);
+
+      // Link item to the user
+      const linkUserQuery = "INSERT INTO users_to_items (user_id, item_id) VALUES ($1, $2)";
+      await t.none(linkUserQuery, [userId, newItem.item_id]);
+
+      return { linked: true }; // Indicate success
+    });
+
+    // Process the result of the transaction
+    if (result.alreadyInCloset) {
+      res.json({ message: 'Item already exists in closet!' });
+    } else if (result.linked) {
+      res.json({ redirect: '/closet', message: 'Item added to closet successfully!' });
+    }
+  } catch (error) {
+    console.error("Error adding item to closet:", error);
+    res.status(500).json({ message: 'Failed to add item to closet', error: error.message });
   }
 });
 
