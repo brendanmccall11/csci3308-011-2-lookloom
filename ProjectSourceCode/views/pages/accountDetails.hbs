@@ -98,8 +98,8 @@
             <main>
                 <section class="form-section">
                     <h2>User Information</h2>
-                    <p>Username: {{user.username}}<span id="username"></span></p>
-                    <p>Name: {{user.first_name}} {{user.last_name}}<span id="username"></span></p>
+                    <p>Username: {{user.username}}</p>
+                    <p>Name: {{user.first_name}} {{user.last_name}}</p>
                 </section>
                 <section class="form-section">
                     <h2>Closet Preference</h2>
@@ -110,6 +110,13 @@
                             <option value="private">Private</option>
                         </select><br>
                     </form>
+                </section>
+                <section class="profile-info">
+                    <h2>Profile Information</h2>
+                    <div>
+                        <p>Number of Outfits: {{outfits_count}}</p>
+                        <p>Number of Items: {{items_count}}</p>
+                    </div>
                 </section>
                 <section class="form-section">
                     <h2>Change Password</h2>
@@ -122,6 +129,7 @@
                         <input type="password" id="confirmPassword" name="confirmPassword" required><br>
                         <button type="submit">Change Password</button>
                     </form>
+                        {{> message}}
                 </section>
             </main>
         </div>

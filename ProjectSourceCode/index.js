@@ -683,44 +683,83 @@ app.get("/outfit", (req, res) => {
 });
 
 // Route to render the account details page
-app.get("/accountDetails", (req, res) => {
-  // Pass user information to the template
-  res.render("pages/accountDetails", { user: req.session.user });
+app.get("/accountDetails", async (req, res) => {
+  try {
+    console.log("User information:", req.session.user);
+
+    const items_query = 'SELECT COUNT(*) FROM users_to_items WHERE user_id = $1';
+    const outfits_query = 'SELECT COUNT(*) FROM users_to_outfits WHERE user_id = $1';
+
+    // Retrieve counts
+    const items_count = await db.one(items_query, [req.session.user.user_id]);
+    const outfits_count = await db.one(outfits_query, [req.session.user.user_id]);
+
+    console.log("Items count:", items_count.count);
+    console.log("Outfits count:", outfits_count.count);
+
+    // Render the account details page with user information and counts
+    res.render("pages/accountDetails", {
+      user: req.session.user,
+      items_count: items_count.count,
+      outfits_count: outfits_count.count
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred while loading account details.');
+  }
 });
+
 
 // Route to handle changing password
 app.post("/changePassword", async (req, res) => {
-  const { currentPassword, newPassword, confirmPassword } = req.body;
-
-  // Validate if current password matches with the one stored in the database
-  const isValidPassword = await validatePassword(req.session.user.username, currentPassword); // Implement this function
-  
-  if (!isValidPassword) {
-    return res.status(400).send("Current password is incorrect");
-  }
-
-  // Check if new password and confirm password match
-  if (newPassword !== confirmPassword) {
-    return res.status(400).send("New password and confirm password do not match");
-  }
-
   try {
+    const { currentPassword, newPassword } = req.body;
+    const username = req.session.user.username;
+
+    if (!username) {
+      // If username is not found in the session, redirect to login or handle appropriately
+      return res.status(403).send('Username not found in session.');
+    }
+
+    // Check if the current password matches the one stored in the database
+    const user = await db.one('SELECT * FROM users WHERE username = $1', username);
+    const passwordMatch = await bcrypt.compare(currentPassword, user.password);
+
+    if (!passwordMatch) {
+      // Current password does not match
+      return res.render("pages/accountDetails", {
+        user: req.session.user,
+        message: "Current password is incorrect.",
+        error: true
+      });
+    }
+
     // Hash the new password
-    const hash = await bcrypt.hash(newPassword, 10);
-    
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
     // Update the password in the database
-    await db.none(
-      "UPDATE users SET password = $1 WHERE username = $2",
-      [hash, req.session.user.username]
-    );
+    await db.none('UPDATE users SET password = $1 WHERE username = $2', [hashedPassword, username]);
+
+    // Retrieve counts again
+    const items_query = 'SELECT COUNT(*) FROM users_to_items WHERE user_id = $1';
+    const outfits_query = 'SELECT COUNT(*) FROM users_to_outfits WHERE user_id = $1';
+    const items_count = await db.one(items_query, [req.session.user.user_id]);
+    const outfits_count = await db.one(outfits_query, [req.session.user.user_id]);
 
     // Password updated successfully
-    res.redirect("/accountDetails");
+    return res.render("pages/accountDetails", {
+      user: req.session.user,
+      message: "Password has been successfully changed.",
+      error: false,
+      items_count: items_count.count,
+      outfits_count: outfits_count.count
+    });
   } catch (error) {
-    console.error("Error updating password:", error);
-    res.status(500).send("Error updating password");
+    console.error(error);
+    res.status(500).send('An error occurred while changing the password.');
   }
 });
+
 
 app.get('/logout', (req, res) => {
   req.session.destroy();
