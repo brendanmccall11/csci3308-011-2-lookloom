@@ -1,106 +1,64 @@
-<style>
-    .item-image {
-        max-width: 100px;
-    }
-   .scrolling-wrapper .card {
-        overflow-x: scroll;
-        overflow-y: hidden;
-        white-space: nowrap;
-    }
-    .card {
-        display: inline-block;
-    }
-    .scrolling-wrapper {
-        -webkit-overflow-scrolling: touch;
-    }
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Closet</title>
+    <!-- Add Bootstrap CSS CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      crossorigin="anonymous"
+    />
+    <style>
+        .item-image {
+            max-width: 100px;
+        }
+    </style>
+  </head>
 
-</style>
-
-<div class="p-4 d-flex flex-col">
-    <div class="container text-left w-50 pt-0 p-4">
-        <div class="row  border border-3 rounded p-1 m-1">
+  <!-- Add Your Modal -->
+  
+<body>
+<div class="p-4 d-flex flex-col jutify-content-between" style="position:fixed; right:10%; max-width:100%;">
+    <div class="container text-left w-100 pt-0 p-4">
+        {{#each items}}
+        <a href="{{this.link}}">
+        <div class="row border border-3 rounded p-1">
             <div class="col col-4">
                 <img 
-                    src="https://freepngimg.com/thumb/beanie/136731-large-beanie-free-clipart-hq-thumb.png" 
+                    src="{{this.image_url}}" 
                     alt="Beanie" 
                     class="item-image"> 
             </div>
-            <div class="col">
-                Nordstorm Cashmere Beanie
+            <div class="col" style="text-decoration: none; text-background-none; text-color:gray;">
+                {{this.name}}
             </div>
         </div>
-        <div class="row border border-3 rounded p-1 m-1">
-            <div class="col col-4">
-                <img 
-                    src="https://static.vecteezy.com/system/resources/thumbnails/008/534/694/small/oversized-t-shirt-mockup-cutout-file-png.png" 
-                    alt="TShirt" 
-                    class="item-image"> 
-            </div>
-            <div class="col">
-                White Cotton Tshirt
-            </div>
-        </div>
-        <div class="row border border-3 rounded p-1 m-1">
-            <div class="col col-4">
-                <img 
-                    src="https://www.knotstandard.com/assets/images/products/2269-detail.png?202304204" 
-                    alt="TShirt" 
-                    class="item-image"> 
-            </div>
-            <div class="col">
-                Bomber Jacket
-            </div>
-        </div>
-        <div class="row border border-3 rounded p-1 m-1">
-            <div class="col col-4">
-                <img 
-                    src="https://static.vecteezy.com/system/resources/previews/022/665/831/original/long-pants-with-cut-out-isolated-on-background-transparent-png.png" 
-                    alt="Pants" 
-                    class="item-image"> 
-            </div>
-            <div class="col">
-                Grey Pants or Something
-            </div>
-        </div>
-        <div class="row border border-3 rounded p-1 m-1">
-            <div class="col col-4">
-                <img 
-                    src="https://i.ebayimg.com/00/s/NTM3WDk3Mg==/z/b6QAAOSwetljWAFx/$_58.png" 
-                    alt="Shoes" 
-                    class="item-image"> 
-            </div>
-            <div class="col">
-                Nike AF1's
-            </div>
-        </div>
+        </a>
+        {{/each}}
     </div>
-    <div>
+    <div class="w-100">
         <div class="d-flex flex-col justify-content-between w-full">
-            <h1>A drippy fit</h1>
+            <h1>{{this.outfit.outfit_name}}</h1>
             <a href="/closet">Back to Closet</a>
         </div>
-        {{!-- ownership --}}
-        <h4>Owned by: Jennifer Lawrence</h4>
-        {{!-- total price --}}
+        <h4>Owned by: {{this.owner.first_name}} {{this.owner.last_name}}</h4>
         <h5>Total Price: $80000</h5>
-        {{!-- decription --}}
-        <p>Omg guys this is my description of this incredibly cool fit it is so awesome please trust me and you should
-            totally add this fit to your closet!
+        <p>{{this.outfit.description}}
         </p>
         <div class="d-flex flex-col gap-2">
-            <button>Edit Outfit</button>
-            <button>Share Outfit</button>
+            <form method="POST" action="/outfit">
+                <input type="hidden" name="id" value="{{this.outfit.outfit_id}}"> 
+                <button type="submit">Delete Outfit</button>
+            </form>
+            
         </div>
-        {{!-- <div class="scrolling-wrapper">
-            <div class="card"><h2>Card</h2></div>
-            <div class="card"><h2>Card</h2></div>
-            <div class="card"><h2>Card</h2></div>
-            <div class="card"><h2>Card</h2></div>
-            <div class="card"><h2>Card</h2></div>
-            <div class="card"><h2>Card</h2></div>
-            <div class="card"><h2>Card</h2></div>
-            <div class="card"><h2>Card</h2></div>
-            <div class="card"><h2>Card</h2></div>
-        </div> --}}
     </div> 
 </div>
+
+
+    <!-- Add Bootstrap JS CDN -->
+    <script src="../../js/closetScript.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"  crossorigin="anonymous"></script>
+  </body>
+</html>
