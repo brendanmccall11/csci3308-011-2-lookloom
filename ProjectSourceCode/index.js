@@ -552,11 +552,12 @@ app.post('/closet/deleteItem', function (req, res) {
 
 app.post("/addToOutfit", async (req, res) => {
 
+  const username = req.session.user.username;
   const existing_outfit_id = Number(req.body.existingOutfit); 
   const new_outfit_name = req.body.newOutfitName;
   const new_outfit_description = req.body.newOutfitDescription;
   const current_item_id = Number(req.body.itemId);
-  var current_user_id = await db.query(`SELECT user_id FROM users WHERE username = '${user.username}';`);
+  var current_user_id = await db.query(`SELECT user_id FROM users WHERE username = '${username}';`);
   console.log(current_user_id);
   current_user_id = current_user_id[0].user_id; // access user id from json object returned by query
   console.log(current_user_id);
@@ -568,14 +569,14 @@ app.post("/addToOutfit", async (req, res) => {
     `SELECT * FROM items 
     INNER JOIN users_to_items 
       ON items.item_id = users_to_items.item_id 
-    WHERE users_to_items.user_id = (SELECT user_id FROM users WHERE username = '${user.username}');`);
+    WHERE users_to_items.user_id = (SELECT user_id FROM users WHERE username = '${username}');`);
 
   // query for outfits that belong to user
   const outfits = await db.query(
     `SELECT * FROM outfits 
     INNER JOIN users_to_outfits 
       ON outfits.outfit_id = users_to_outfits.outfit_id 
-    WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = '${user.username}');`
+    WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = '${username}');`
   );
 
   // CASE: if user did not fill in any of the fields
@@ -733,10 +734,11 @@ app.post("/addtocloset", async (req, res) => {
 app.get("/outfits", async (req, res) => {
   try {
     // Fetch all items from the database
+    const username = req.session.user.username;
     const outfits = await db.query(`SELECT * FROM outfits 
     INNER JOIN users_to_outfits 
     ON outfits.outfit_id = users_to_outfits.outfit_id
-    WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = '${user.username}')`);
+    WHERE users_to_outfits.user_id = (SELECT user_id FROM users WHERE username = '${username}')`);
 
     // Render the closet page and pass items to the template
     res.render("pages/outfits", { outfits });
