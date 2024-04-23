@@ -502,7 +502,7 @@ app.post("/closet/addYourOwn", (req, res) => {
   db.task('post-everything', task => {
     return task.batch([task.any(query, [item_name, price, image_url, website_link, description, brand]), 
       task.any(query1, [item_name, category]),
-      task.any(query2, [user.username, item_name])]);
+      task.any(query2, [req.session.user.username, item_name])]);
   })
     .then(function (data) {
       res.redirect("/closet")
@@ -511,7 +511,13 @@ app.post("/closet/addYourOwn", (req, res) => {
 
       try {
         // Fetch all items from the database
-        const items = await db.query("SELECT * FROM items");
+        const items = await db.query(
+          `SELECT * FROM items 
+          INNER JOIN users_to_items 
+            ON items.item_id = users_to_items.item_id 
+          WHERE users_to_items.user_id = $1`,
+          [req.session.user.id]  // Changed this to use a parameterized query to avoid SQL injection (Olivia)
+        );
     
         // Render the closet page and pass items to the template
         res.render("pages/closet", { 

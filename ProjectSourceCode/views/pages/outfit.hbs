@@ -19,6 +19,7 @@
   <!-- Add Your Modal -->
   
 <body>
+    <!--p-4 d-flex flex-col jutify-content-between-->
 <div class="p-4 d-flex flex-col jutify-content-between" style="position:fixed; right:10%; max-width:100%;">
     <div class="container text-left w-100 pt-0 p-4">
         {{#each items}}
@@ -49,7 +50,7 @@
         <div class="d-flex flex-col gap-2">
             <form method="POST" action="/outfit">
                 <input type="hidden" name="id" value="{{this.outfit.outfit_id}}"> 
-                <button type="submit">Delete Outfit</button>
+                <button class = "btn btn-primary" type="submit">Delete Outfit</button>
             </form>
             
         </div>

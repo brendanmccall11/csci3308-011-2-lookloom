@@ -25,8 +25,8 @@ VALUES
     ('Sundress', 25.99, 'https://d1flfk77wl2xk4.cloudfront.net/Assets/14/988/XXL_p0207598814.jpg', 'https://www.yesstyle.com/en/flowerisque-puff-sleeve-floral-mini-a-line-dress/info.html/pid.1128591867', 'Purple and white flowy dress', 'Flowerisque'), 
     ('White Sandals', 42.15, 'https://m.media-amazon.com/images/I/61lpuRrYbdS._AC_SX695_.jpg', '', 'Chunky white sandals', 'Soda ACCOUNT'),
     ('Hair Bow', 6.99, 'https://m.media-amazon.com/images/I/51Xf1Ym+Y3L._SX679_.jpg', '', 'White bow to put in your hair', 'Kefley'),
-    ('Jean shorts', 20.99, 'https://d1flfk77wl2xk4.cloudfront.net/Assets/01/172/M_p0098817201.jpg', 'https://www.yesstyle.com/en/dudu-high-waist-denim-shorts/info.html/pid.1070830769', 'High-waisted jean shorts for warm weather', 'Dudu'),
     ('Floral sweater', 15.99, 'https://i.pinimg.com/736x/f0/70/29/f07029dc5d87a3e5ddf48c0bc481b82e.jpg', '', 'Yellow blouse with flower patterns', 'SHEIN'),
+    ('Jean shorts', 20.99, 'https://d1flfk77wl2xk4.cloudfront.net/Assets/01/172/M_p0098817201.jpg', 'https://www.yesstyle.com/en/dudu-high-waist-denim-shorts/info.html/pid.1070830769', 'High-waisted jean shorts for warm weather', 'Dudu'),
     ('Bow necklace', 9.99, 'https://m.media-amazon.com/images/I/41d33PFCiBL._AC_SY625_.jpg', '', 'Gold necklace with yellow bow charm', 'SUNNYOUTH'),
     ('Air Force Ones', 115, 'https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/f094af40-f82f-4fb9-a246-e031bf6fc411/air-force-1-07-womens-shoes-b19lqD.png', 'https://www.nike.com/t/air-force-1-07-womens-shoes-b19lqD/DD8959-100', 'White Nike sneakers', 'Nike');
 
