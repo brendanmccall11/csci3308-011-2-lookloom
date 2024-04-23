@@ -77,12 +77,12 @@ app.use(
 // <!-- Section 4 : API Routes -->
 // *****************************************************
 
-const user = {
-  username: undefined,
-  password: undefined,
-  firstName: undefined,
-  lastName: undefined,
-};
+// const user = {
+//   username: undefined,
+//   password: undefined,
+//   firstName: undefined,
+//   lastName: undefined,
+// };
 
 // THIS ENDPOINT IS FOR LAB 11
 app.get("/welcome", (req, res) => {
@@ -766,8 +766,8 @@ app.get("/accountDetails", async (req, res) => {
     const outfits_query = 'SELECT COUNT(*) FROM users_to_outfits WHERE user_id = $1';
 
     // Retrieve counts
-    const items_count = await db.one(items_query, [req.session.user.user_id]);
-    const outfits_count = await db.one(outfits_query, [req.session.user.user_id]);
+    const items_count = await db.one(items_query, [req.session.user.id]);
+    const outfits_count = await db.one(outfits_query, [req.session.user.id]);
 
     console.log("Items count:", items_count.count);
     console.log("Outfits count:", outfits_count.count);
