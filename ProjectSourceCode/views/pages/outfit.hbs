@@ -20,7 +20,10 @@
   
 <body>
     <!--p-4 d-flex flex-col jutify-content-between-->
-<div class="p-4 d-flex flex-col jutify-content-between" style="position:fixed; right:10%; max-width:100%;">
+    <div class = "position-absolute top-0 end-0">
+        <button class = "btn btn-primary" href="/closet"> Back to Closet</button>
+    </div>
+<div class="p-4 d-flex flex-col jutify-content-between" style="margin:auto; width: 50%; height: 60%">
     <div class="container text-left w-100 pt-0 p-4">
         {{#each items}}
         <a href="{{this.link}}">
@@ -41,7 +44,6 @@
     <div class="w-100">
         <div class="d-flex flex-col justify-content-between w-full">
             <h1>{{this.outfit.outfit_name}}</h1>
-            <a href="/closet">Back to Closet</a>
         </div>
         <h4>Owned by: {{this.owner.first_name}} {{this.owner.last_name}}</h4>
         <h5>Total Price: $80000</h5>
