@@ -773,6 +773,19 @@ app.get("/outfit", async (req, res) => {
     console.error("Error fetching data:", error);
     res.status(500).send("Internal Server Error");
   }
+});
+
+app.post("/outfit", async (req, res) => {
+  try {
+    const delUser = await db.query(`DELETE FROM users_to_outfits WHERE outfit_id = ${req.body.id};`);
+    const delItem = await db.query(`DELETE FROM items_to_outfits WHERE outfit_id = ${req.body.id};`);
+    const delFit = await db.query(`DELETE FROM outfits WHERE outfit_id = ${req.body.id};`);
+    res.redirect('/outfits')
+  }
+  catch (error) {
+    console.error("Error fetching data:", error);
+    res.status(500).send("Internal Server Error");
+  }
   
 });
 

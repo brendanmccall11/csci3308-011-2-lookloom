@@ -47,8 +47,11 @@
         <p>{{this.outfit.description}}
         </p>
         <div class="d-flex flex-col gap-2">
-            <button>Edit Outfit</button>
-            <button>Share Outfit</button>
+            <form method="POST" action="/outfit">
+                <input type="hidden" name="id" value="{{this.outfit.outfit_id}}"> 
+                <button type="submit">Delete Outfit</button>
+            </form>
+            
         </div>
     </div> 
 </div>
