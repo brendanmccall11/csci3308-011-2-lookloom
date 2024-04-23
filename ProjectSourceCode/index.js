@@ -696,27 +696,30 @@ app.post("/addtocloset", async (req, res) => {
     const result = await db.tx(async t => {
       // Check if the item already exists in the user's closet
       const itemInCloset = await t.oneOrNone(
-        "SELECT item_id FROM users_to_items WHERE user_id = $1 AND item_id IN (SELECT item_id FROM items WHERE name = $2 AND brand = $3)",
+        `SELECT uti.item_id FROM users_to_items uti
+        JOIN items i ON uti.item_id = i.item_id
+        WHERE uti.user_id = $1 AND i.name = $2 AND i.brand = $3`,
         [userId, name, brand]
       );
 
       if (itemInCloset) {
+        // If item exists, return early
         return { alreadyInCloset: true };
+      } else {
+        // Insert item if it doesn't exist
+        const insertItemQuery = "INSERT INTO items (name, price, image_url, description, brand) VALUES ($1, $2, $3, $4, $5) RETURNING item_id";
+        const newItem = await t.one(insertItemQuery, [name, parseFloat(price), image, description, brand]);
+
+        // Link item to category
+        const linkCategoryQuery = "INSERT INTO items_to_categories (item_id, category_id) VALUES ($1, $2)";
+        await t.none(linkCategoryQuery, [newItem.item_id, categoryid]);
+
+        // Link item to the user
+        const linkUserQuery = "INSERT INTO users_to_items (user_id, item_id) VALUES ($1, $2)";
+        await t.none(linkUserQuery, [userId, newItem.item_id]);
+
+        return { linked: true }; // Indicate successful addition
       }
-
-      // Insert item if it doesn't exist
-      const insertItemQuery = "INSERT INTO items (name, price, image_url, description, brand) VALUES ($1, $2, $3, $4, $5) RETURNING item_id";
-      const newItem = await t.one(insertItemQuery, [name, parseFloat(price), image, description, brand]);
-
-      // Link item to category
-      const linkCategoryQuery = "INSERT INTO items_to_categories (item_id, category_id) VALUES ($1, $2)";
-      await t.none(linkCategoryQuery, [newItem.item_id, categoryid]);
-
-      // Link item to the user
-      const linkUserQuery = "INSERT INTO users_to_items (user_id, item_id) VALUES ($1, $2)";
-      await t.none(linkUserQuery, [userId, newItem.item_id]);
-
-      return { linked: true }; // Indicate success
     });
 
     // Process the result of the transaction
@@ -730,6 +733,7 @@ app.post("/addtocloset", async (req, res) => {
     res.status(500).json({ message: 'Failed to add item to closet', error: error.message });
   }
 });
+
 
 app.get("/outfits", async (req, res) => {
   try {
