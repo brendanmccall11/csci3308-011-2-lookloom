@@ -12,8 +12,8 @@ CREATE TABLE items (
   item_id SERIAL PRIMARY KEY,
   name VARCHAR(100) UNIQUE NOT NULL,
   price SMALLINT,
-  image_url VARCHAR(200) NOT NULL,
-  link VARCHAR(200),
+  image_url VARCHAR(800) NOT NULL,
+  link VARCHAR(800),
   description VARCHAR(200),
   brand VARCHAR(50)
 );
