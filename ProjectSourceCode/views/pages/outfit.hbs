@@ -23,44 +23,46 @@
   
 <body>
     <!--p-4 d-flex flex-col jutify-content-between-->
-    <div class = "position-absolute top-0 end-0">
-        <button class = "btn btn-primary" href="/closet"> Back to Closet</button>
-    </div>
-<div class="p-4 d-flex flex-col jutify-content-between" style="margin:auto; width: 50%; height: 60%">
-    <div class="container text-left w-100 pt-0 p-4">
-        {{#each items}}
-        <a href="{{this.link}}">
-        <div class="row border border-3 rounded p-1">
-            <div class="col col-4">
-                <img 
-                    src="{{this.image_url}}" 
-                    alt="Beanie" 
-                    class="item-image"> 
+<div class = "shadow-lg p-4 rounded border bg-body" style = "margin: auto; width: 50%">
+    <div class="d-flex flex-col jutify-content-between">
+        <div class="container text-left w-100 pt-0 p-4">
+            {{#each items}}
+            <a href="{{this.link}}">
+            <div class="row border border-3 rounded p-1">
+                <div class="col col-4">
+                    <img 
+                        src="{{this.image_url}}" 
+                        alt="Beanie" 
+                        class="item-image"> 
+                </div>
+                <div class="col" style="color: black; text-decoration: none!important;">
+                    {{this.name}}
+                </div>
             </div>
-            <div class="col" style="color: black; text-decoration: none!important;">
-                {{this.name}}
+            </a>
+            {{/each}}
+        </div>
+        <div class="w-100">
+            <div class="d-flex flex-col justify-content-between w-full">
+                <h1>{{this.outfit.outfit_name}}</h1>
             </div>
-        </div>
-        </a>
-        {{/each}}
+            <h4>Owned by: {{this.owner.first_name}} {{this.owner.last_name}}</h4>
+            <h5>Total Price: $80000</h5>
+            <p>{{this.outfit.description}}
+            </p>
+            <div class="d-flex flex-col gap-2">
+                <form method="POST" action="/outfit">
+                    <input type="hidden" name="id" value="{{this.outfit.outfit_id}}"> 
+                    <button class = "btn btn-primary" type="submit">Delete Outfit</button>
+                </form> 
+            </div>
+            <div class = "text-end mt-3 mr-3">
+                <button class = "btn btn-outline-secondary" href="/closet"> Back to Closet</button>
+            </div>
+        </div> 
     </div>
-    <div class="w-100">
-        <div class="d-flex flex-col justify-content-between w-full">
-            <h1>{{this.outfit.outfit_name}}</h1>
-        </div>
-        <h4>Owned by: {{this.owner.first_name}} {{this.owner.last_name}}</h4>
-        <h5>Total Price: $80000</h5>
-        <p>{{this.outfit.description}}
-        </p>
-        <div class="d-flex flex-col gap-2">
-            <form method="POST" action="/outfit">
-                <input type="hidden" name="id" value="{{this.outfit.outfit_id}}"> 
-                <button class = "btn btn-primary" type="submit">Delete Outfit</button>
-            </form>
-            
-        </div>
-    </div> 
 </div>
+
 
 
     <!-- Add Bootstrap JS CDN -->
