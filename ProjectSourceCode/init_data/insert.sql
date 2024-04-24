@@ -55,7 +55,7 @@ INSERT INTO outfits (outfit_name, image_url)
 VALUES
     ('test outfit', '../../img/blouse.jpeg'),
     ('another test outfit', '../../img/maxi-dress.jpeg'),
-    ('Finals week', '../../img/cu_boulder_sweatshirt.jpeg'),
+    ('Finals week', '../../img/cu_boulder_sweatshirt.jpg'),
     ('Summer vacation', 'https://d1flfk77wl2xk4.cloudfront.net/Assets/14/988/XXL_p0207598814.jpg'),
     ('Movie night', 'https://i.pinimg.com/736x/f0/70/29/f07029dc5d87a3e5ddf48c0bc481b82e.jpg');
     
