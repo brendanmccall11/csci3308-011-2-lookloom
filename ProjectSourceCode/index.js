@@ -181,12 +181,7 @@ app.use(auth);
 
 app.get("/gallery", async (req, res) => {
   try {
-    // Fetch all items from the database
-    //const items = await db.query("SELECT * FROM items");
-
-    // Render the gallery page and pass items to the template
-    //res.render('pages/gallery', { items });
-    res.render('pages/gallery');
+    res.render('pages/gallery', { isGalleryPage: true });
   } catch (error) {
     // Handle errors
     console.error("Error fetching data:", error);
@@ -194,68 +189,35 @@ app.get("/gallery", async (req, res) => {
   }
 });
 
-/*app.get("/gallery/search", async (req, res) => {
-  try {
-    const query = req.query.q;
+app.get("/gallery/search", async (req, res) => {
+  const keyword = req.query.q; // Get the keyword from the search input
 
-    const keywordOptions = {
-      method: 'GET',
-      url: 'https://axesso-axesso-amazon-data-service-v1.p.rapidapi.com/amz/amazon-search-by-keyword-asin',
-      params: {
-        domainCode: 'com',
-        keyword: query,
-        page: '1',
-        excludeSponsored: 'false',
-        sortBy: 'relevanceblender',
-        withCache: 'true'
-      },
-      headers: {
-        'X-RapidAPI-Key': process.env.API_KEY,
-        'X-RapidAPI-Host': 'axesso-axesso-amazon-data-service-v1.p.rapidapi.com'
-      }
-    };
-    
-    try {
-      const keywordResponse = await axios.request(keywordOptions);
-      productAsin = keywordResponse.data.foundProducts[0];
-
-      const lookupOptions = {
-        method: 'GET',
-        url: 'https://axesso-axesso-amazon-data-service-v1.p.rapidapi.com/amz/amazon-lookup-product',
-        params: {
-          url: 'https://www.amazon.com/dp/' + productAsin + '/'
-        },
-        headers: {
-          'X-RapidAPI-Key': process.env.API_KEY,
-          'X-RapidAPI-Host': 'axesso-axesso-amazon-data-service-v1.p.rapidapi.com'
-        }
-      };
-      
-      try {
-        const lookupResponse = await axios.request(lookupOptions);
-        console.log(lookupResponse.data);
-        const amazonItems = lookupResponse.data.map(amazonItem => ({
-          cardUrl: 'https://www.amazon.com/' + amazonItem.dpUrl,
-          cardImage: amazonItem.imageUrl,
-          cardName: amazonItem.productDescription,
-          cardPrice: amazonItem.price,
-          cardDescription: amazonItem.productRating + ', ' + amazonItem.salesVolume,
-        }));
-      } catch (error) {
-        console.error(error);
-      }
-
-      console.log(keywordResponse.data);
-    } catch (error) {
-      console.error(error);
+  const options = {
+    method: 'GET',
+    url: 'https://axesso-axesso-amazon-data-service-v1.p.rapidapi.com/amz/amazon-search-by-keyword-asin',
+    params: {
+      domainCode: 'com',
+      keyword: keyword, // Use the keyword from the search input
+      page: '1',
+      excludeSponsored: 'false',
+      sortBy: 'relevanceblender',
+      withCache: 'true'
+    },
+    headers: {
+      'X-RapidAPI-Key': process.env.API_KEY,
+      'X-RapidAPI-Host': 'axesso-axesso-amazon-data-service-v1.p.rapidapi.com'
     }
+  };
 
-    res.render('pages/gallery');
+  try {
+    const response = await axios.request(options);
+    const items = response.data.searchProductDetails; // Assuming this is the array of items
+    res.render('pages/gallery', { amazonItems: items, isGalleryPage: true }); // Pass the items to the template
   } catch (error) {
-    console.error("Error fetching data:", error);
-    res.status(500).send("Internal Server Error");
+    console.error(error);
+    res.status(500).send('Error fetching data');
   }
-});*/
+});
 
 app.get("/closet", async (req, res) => {
   try {

@@ -54,58 +54,7 @@
         overflow: hidden;
         text-align: left;
     }
-    #gallery-modal {
-        display: none; /* Hidden by default */
-        position: absolute; /* Stay in place */
-    }
     </style>
-
-    <div class="modal" id="Modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="ModalLabel">Add Your Own Item</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form class = "needs-validation">
-            <div class = "mb-3">
-              <label class = "form-label" for = "item_name">Item Name</label>
-              <input class = "form-control" name = "item_name" id = "item_name" type = "text" placeholder="" required>
-
-              <label class = "form-label" for = "brand">Brand</label>
-              <input class = "form-control" name = "brand" id = "brand" type = "text" placeholder="">
-
-              <label class = "form-label" for = "price">Price</label>
-              <input class = "form-control" name = "price" id = "price" type = "number" placeholder="" required>
-
-              <label class = "form-label" for = "description">Description</label>
-              <input class = "form-control" name = "description" id = "description" type = "text" placeholder="">
-
-              <label class = "form-label" for = "image_url">Image URL</label>
-              <input class = "form-control" name = "image_url" id = "image_url" type = "url" placeholder="" required>
-
-              <label class = "form-label" for = "website_url">Website Link</label>
-              <input class = "form-control" name = "website_url" id = "website_url" type = "url" placeholder="">
-
-              <label class = "form-label" for = "categories">Categories</label>
-              <select name = "categories" id = "categories" class="form-select" aria-label="Default select example" required>
-                <option selected disabled value="">Select one...</option>
-                <option value="Tops">Tops</option>
-                <option value="Bottoms">Bottoms</option>
-                <option value="Dresses">Dresses</option>
-                <option value="Shoes">Shoes</option>
-                <option value="Accessories">Accesories</option>
-              </select>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Add Item</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
 </head>
 <body>
     <div>
@@ -115,26 +64,25 @@
         <!-- Display items from the amazonItems array -->
         {{#each amazonItems}}
         <div class="card">
-            <a href="{{this.link}}" class="card-link">
-                <img src="{{this.imageUrl}}" alt="Card Image" class="card-img-top">
+            <a href="https://www.amazon.com/{{this.dpUrl}}" class="card-link">
+                <img src="{{this.imgUrl}}" alt="Card Image" class="card-img-top">
             </a>
             <div class="card-body">
                 <div class="card-name">
-                    <h5>{{this.name}}</h5>
+                    <h5>{{this.productDescription}}</h5>
                 </div>
                 <div class="card-price">
                     <p>${{this.price}}</p>
                 </div>
                 <div class="card-description">
-                    <p>{{this.description}}</p>
+                    <p>This product has been rated {{this.productRating}}.</p>
                 </div>
                 <button type="button" class="addToCloset btn btn-success" 
-                        data-name="{{this.name}}" 
+                        data-name="{{this.productDescription}}" 
                         data-price="{{this.price}}" 
-                        data-image="{{this.imageUrl}}" 
-                        data-description="{{this.description}}" 
-                        data-brand="{{this.brand}}" 
-                        data-categoryid="{{this.categoryid}}">
+                        data-image="{{this.imgUrl}}" 
+                        data-description="This product has been rated {{this.productRating}}." 
+                        data-categoryid="{{this.categoryid}}" value="Add to Closet">
                     Add to Closet
                 </button>
             </div>
