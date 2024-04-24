@@ -265,7 +265,7 @@ function createCard(item) {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'addToCloset btn btn-success mb-2';
-    button.textContent = 'Add to Outfit';
+    button.textContent = 'Add to Closet';
     button.dataset.name = item.name;
     button.dataset.price = item.price;
     button.dataset.image = item.imageUrl;
