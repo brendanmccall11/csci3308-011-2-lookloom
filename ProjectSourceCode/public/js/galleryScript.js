@@ -1,30 +1,16 @@
 // *****************************************************
 // Gallery Modal
 // *****************************************************
-var closetModal = document.getElementById("Modal");
 var addToClosetButtons = document.querySelectorAll('.btn.btn-success');
 var closeButton = document.getElementsByClassName('close-button');
 const cButtonArr = Array.from(closeButton);
 
-addToClosetButtons.forEach(function(button) {
-    button.onclick = function() {
-        closetModal.style.display = "block";
-    }
+document.getElementById('searchForm').addEventListener('submit', function (event) {
+    clearCards(); // Clear the cards before the new search
+    // Prevent the default form submission if you are handling the search with AJAX
+    event.preventDefault();
+    // Add your code to handle the search and add new cards
 });
-
-// When the user clicks on <span> (x), close the modal
-cButtonArr.forEach(function(but) {
-    but.onclick = function() {
-        closetModal.style.display = "none";
-    }
-});
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == closetModal) {
-        closetModal.style.display = "none";
-    }
-};
 
 document.addEventListener("DOMContentLoaded", function () {
   var addToClosetButtons = document.querySelectorAll(".addToCloset");
@@ -285,10 +271,19 @@ function createCard(item) {
     return card;
 }
 
-
 function addCardsToPage() {
     const container = document.querySelector('.fixed-div');
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    if (!urlParams.has("q"))
     items.forEach(item => {
         container.appendChild(createCard(item));
     });
+}
+
+function clearCards() {
+    const container = document.querySelector('.fixed-div');
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
 }
