@@ -29,3 +29,7 @@ In the docker-compose.yaml file change the command from 'npm start' to 'npm run 
 
 ## Link to Running Application
 http://recitation-11-team-2.eastus.cloudapp.azure.com:3000/
+
+## Video Demo
+Here is a link to our video demo to familiarize yourself with LookLoom:
+https://drive.google.com/file/d/117UUeinB5dnOA8vs0m_eOSFcjRB7t-F0/view 
